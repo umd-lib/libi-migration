@@ -69,8 +69,6 @@ class PmItd extends Config {
 
     http.post(body: postBody, requestContentType: URLENC ) { resp ->
 
-      println "Tweet response status: ${resp.statusLine}"
-
       if (resp.headers.'Set-Cookie') {
         (cookie) = resp.headers.'Set-Cookie'.split(';')
       }
