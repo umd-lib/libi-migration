@@ -210,7 +210,7 @@ class Config {
    * Get unique id of the node.
    */
 
-  public String getUnique (Page page, Node doc, Node body) {
+  public String getUnique (Page page) {
     return page.url.toString()
   }
 
@@ -268,12 +268,17 @@ class Config {
 
       log.debug("checking link: ${link.url}")
 
-      if (!(urlDone.any {it.surl == link.surl}) && 
-          !(urlTodo.any {it.surl == link.surl}) &&
-          isFollowable(link)) {
+      if (isFollowable(link)) {
+        // change the link to internal
+        node.text = '[[' + getUnique(link) + ']]'
+
+        // check if link should be queued
+        if (!(urlDone.any {it.surl == link.surl}) && 
+            !(urlTodo.any {it.surl == link.surl})) {
         
-        link.ctype = getContentType(link.url)
-        urlTodo << link
+          link.ctype = getContentType(link.url)
+          urlTodo << link
+        }
       }
     }
 
@@ -284,7 +289,7 @@ class Config {
     clone.name    = getName(page, doc, body)
     clone.title   = getTitle(page, doc, body)
     clone.type    = getType(page, doc, body)
-    clone.uniq    = getUnique(page, doc, body) 
+    clone.uniq    = getUnique(page) 
     clone.body    = body.asXML()
 
     hb.save(clone)

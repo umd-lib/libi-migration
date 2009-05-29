@@ -96,7 +96,7 @@ class PmItd extends Config {
    * Get unique id of the node.
    */
 
-  public String getUnique (Page page, Node doc, Node body) {
+  public String getUnique (Page page) {
     return page.query.n
   }
 
