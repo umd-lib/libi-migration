@@ -1,0 +1,33 @@
+#!/bin/sh
+
+if [ "$JAVA_HOME" == "" ]
+then
+  echo "Error: the JAVA_HOME env var must be set"
+  exit 1
+fi
+
+if [ "$GROOVY_HOME" == "" ]
+then
+  echo "Error: the GROOVY_HOME env var must be set"
+  exit 1
+fi
+
+BINDIR=`dirname $0`
+BASEDIR=`cd "$BINDIR/.." ; pwd`
+
+CLASSPATH="lib:conf"
+for jar in $BASEDIR/lib/*.jar
+do
+  if [ "$CLASSPATH" == "" ] 
+  then
+    CLASSPATH="$jar"
+  else
+    CLASSPATH="${CLASSPATH}:${jar}"
+  fi
+done
+
+export CLASSPATH
+
+$BASEDIR/conf/webharvest/webharvest.groovy "$@"
+
+
