@@ -26,6 +26,8 @@ class PmItd extends Config {
   def pmHome = 'ITDStaff'
   def pmPasswords = null
 
+  def pmExclusions = ['RecentChanges']
+
   def private log = Logger.getInstance(PmItd.name);
 
 
@@ -128,7 +130,14 @@ class PmItd extends Config {
           && q.n?.startsWith("${pmHome}.")    // Is the corrent pmHome
           && q.n.indexOf('?') == -1)          // Doesn't contain extra params
       {
-        ret = true
+        def home, loc
+        (home, loc) = q.n.split('\\.')
+
+        if (pmExclusions.any { it == loc }) {
+          ret = false
+        } else { 
+          ret = true
+        }
       }
     }
 
