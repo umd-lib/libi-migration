@@ -63,6 +63,10 @@ class Config {
 
   def private log = Logger.getInstance(Config.getName());
 
+  def var = [:]        // command-line variables
+
+  def count = [:]      // statistics
+
 
   /**********************************************************************/
   /**
@@ -70,6 +74,7 @@ class Config {
    */
 
   public Config() {
+    count.nodes = 0
   }
 
 
@@ -334,6 +339,13 @@ class Config {
         urlDone << page
 
         handlePage(page) 
+      }
+
+      count.nodes++
+
+      if (var.limit && count.nodes >= (var.limit as int)) {
+        // reached our limit
+        break;
       }
     }
 

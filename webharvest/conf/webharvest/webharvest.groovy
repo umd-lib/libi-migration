@@ -69,6 +69,12 @@ try {
   conf.out = new groovy.xml.MarkupBuilder(outfile) 
   conf.hb = hb
 
+  // add command-line vars
+  vars.each {
+    (k, v) = it.split('=')
+    conf.var[k] = v
+  }
+
   // Execute the harvest
   conf.out.nodes() { conf.harvest() }
 
