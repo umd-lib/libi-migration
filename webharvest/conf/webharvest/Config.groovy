@@ -369,7 +369,7 @@ class Config {
    */
 
   public boolean isFollowable(Page page) {
-    return true;
+    return page.surl.startsWith(baseUrl.toString())
   }
 
 
