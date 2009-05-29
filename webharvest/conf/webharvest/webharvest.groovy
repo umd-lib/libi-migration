@@ -24,7 +24,7 @@ import org.hibernate.cfg.AnnotationConfiguration
 // Use grape repository to download required libraries
 @Grapes([
     @Grab(group='org.hibernate', module='hibernate-annotations', version='3.4.0.GA'),
-    @Grab(group='org.slf4j', module='slf4j-simple', version='1.4.2'),
+    @Grab(group='org.slf4j', module='slf4j-log4j12', version='1.4.2'),
     @Grab(group='javassist', module='javassist', version='3.4.GA'),
 ])
 
@@ -37,13 +37,13 @@ parseCommandLine()
 try {
  
   // Setup logging
-  root = Logger.getRoot()
-  root.removeAllAppenders()
-  layout = new PatternLayout("[%d] [%-5p]: (%c{2})%n%m%n%n")
-  root.addAppender(new ConsoleAppender(layout));
-  root.setPriority(debug ? Priority.DEBUG : Priority.INFO)
-  
+  System.setProperty('log4j.configuration', 'log4j.properties')
+
   log = Logger.getInstance('webharvest')
+
+  if (debug) {
+    log.setPriority(Priority.DEBUG)
+  }
 
   // Hibernate for object storage
   hb = configureHibernate()
@@ -87,6 +87,8 @@ System.exit(0)
  */
 
 def configureHibernate() {
+
+  log.info("Initializing Hibernate")
 
   // Derby log location
   System.setProperty('derby.stream.error.file', "${workdir}/derby.log")
