@@ -355,16 +355,6 @@ class Config {
 
   /**********************************************************************/
   /**
-   * Determine if a url should be a child of another url.
-   */
-
-  public boolean isChild(URL parent, URL child) {
-    return true;
-  }
-
-
-  /**********************************************************************/
-  /**
    * Determine if a url should be followed
    */
 
