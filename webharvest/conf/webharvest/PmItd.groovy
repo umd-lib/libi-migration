@@ -1,15 +1,17 @@
 package webharvest
 
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
+import groovy.lang.Binding
+import groovy.lang.GroovyShell
 
 import static groovyx.net.http.ContentType.URLENC
 
 import groovyx.net.http.HTTPBuilder
 
-import org.dom4j.Node;
+import org.dom4j.Document
+import org.dom4j.DocumentHelper
+import org.dom4j.Node
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.Logger
 
 
 /**
@@ -80,6 +82,24 @@ class PmItd extends Config {
     cookies[key] = value
 
     log.debug("Cookies: ${cookies}")
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Extract the content body from the html.
+   */
+
+  public Node extractBody(Document doc) {
+    def n = DocumentHelper.createDocument().addElement('div')
+
+    def l = doc.selectNodes("//div[@id='wikititle'|@id='wikitext']");
+
+    l.each { 
+      n.add(it.clone()) 
+    }
+
+    return n
   }
 
 

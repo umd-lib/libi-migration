@@ -267,6 +267,10 @@ class Config {
     // Extract the content body from the html
     def body = extractBody(doc)
 
+    if (log.isDebugEnabled()) {
+      log.debug("Extracted body\n${body.asXML()}")
+    }
+
     // Process each link
     getLinks(body).each { node ->
       def link = new Page(url:buildUrl(page.url, node.text))
