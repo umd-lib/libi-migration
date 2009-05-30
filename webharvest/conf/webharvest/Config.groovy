@@ -104,6 +104,16 @@ class Config {
 
   /**********************************************************************/
   /**
+   * Build the tree of nodes.
+   */
+
+  public List buildTree(List done) {
+    return ['nodes'] + done
+  }
+
+
+  /**********************************************************************/
+  /**
    * Extract the content body from the html.  This is not necessarily
    * the html body element.
    */
@@ -353,24 +363,14 @@ class Config {
       }
     }
 
-    // Read the saved pages back in
-    urlDone.each { page ->
-      // load the page with body back in
-      page = hb.get(Page, page.surl)
+    // Build the node tree
+    log.info('Building node tree')
 
-      // output a node
-      out.node(created: page.created,
-               name:    page.name,
-               title:   page.title,
-               type:    page.type,
-               unique:  page.uniq)
-        {
-        out.data() {
-          out.body(page.body)
-        }
-      }
-    }
+    def tree = buildTree(urlDone)
 
+    // Output nodes
+    log.info('Writing out nodes')
+    outputNodes(tree)
   }
 
 
@@ -381,6 +381,60 @@ class Config {
 
   public boolean isFollowable(Page page) {
     return page.surl.startsWith(baseUrl.toString())
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Output nodes.  
+   *
+   * @param tree a List or a Page for output.  If a list then head must be a String or Page and tail is a list of children consisting of Pages or Lists
+   */
+
+  public void outputNodes(Object tree) {
+
+    if (tree instanceof List) {
+      def head = tree.remove(0)
+
+      if (head instanceof String) {
+        out."${head}"() { tree.each {outputNodes(it)} }
+
+      } else { // Page
+        
+        // load the page with body back in
+        def page = hb.get(Page, head.surl)
+    
+        // output a node
+        out.node(created: page.created,
+                 name:    page.name,
+                 title:   page.title,
+                 type:    page.type,
+                 unique:  page.uniq)
+        {
+          out.data() {
+            out.body(page.body)
+          }
+          tree.each {outputNodes(it)}
+        }
+      }
+
+    } else { // Page
+        
+      // load the page with body back in
+      def page = hb.get(Page, tree.surl)
+    
+      // output a node
+      out.node(created: page.created,
+               name:    page.name,
+               title:   page.title,
+               type:    page.type,
+               unique:  page.uniq)
+      {
+        out.data() {
+          out.body(page.body)
+        }
+      }
+    }
   }
 
 

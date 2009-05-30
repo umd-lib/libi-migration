@@ -76,7 +76,7 @@ try {
   }
 
   // Execute the harvest
-  conf.out.nodes() { conf.harvest() }
+  conf.harvest()
 
 }
 catch (Throwable t) {

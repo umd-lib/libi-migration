@@ -41,7 +41,7 @@ class PmItd extends Config {
   public PmItd() {
     super()
 
-    baseUrl = new URL('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=ITDStaff.HomePage')
+    baseUrl = new URL("http://www.itd.umd.edu/pmwiki/pmwiki.php?n=${pmHome}.HomePage")
 
     // Read in PmWiki passwords
     def binding = new Binding()
@@ -82,6 +82,17 @@ class PmItd extends Config {
     cookies[key] = value
 
     log.debug("Cookies: ${cookies}")
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Build the tree of nodes.  Make the first node in the list the parent
+   * of all the rest of the nodes.
+   */
+
+  public List buildTree(List done) {
+    return ['nodes'] + [done]
   }
 
 
