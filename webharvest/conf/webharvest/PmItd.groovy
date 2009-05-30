@@ -102,13 +102,11 @@ class PmItd extends Config {
    */
 
   public Node extractBody(Document doc) {
-    def n = DocumentHelper.createDocument().addElement('div')
+    def n = DocumentHelper.createDocument()
 
-    def l = doc.selectNodes("//div[@id='wikititle'|@id='wikitext']");
+    def l = doc.selectNodes("//div[@id='wikitext']");
 
-    l.each { 
-      n.add(it.clone()) 
-    }
+    l.each { n.add(it.clone()) }
 
     return n
   }
