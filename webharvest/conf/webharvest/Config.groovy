@@ -94,7 +94,7 @@ class Config {
     def url = new URL(baseUrl, rel);
 
     if (url.path.endsWith('/index.html')) {
-      url.path = url.path.substring(0, url.path.length()-10)
+      url = new URL(url, './')
     }
 
     return url
@@ -376,8 +376,8 @@ class Config {
         node.text = '[[' + getUnique(link) + ']]'
 
         // check if link should be queued
-        if (!(urlDone.any {it.surl == link.surl}) && 
-            !(urlTodo.any {it.surl == link.surl})) {
+        if (!(link in urlDone) && 
+            !(link in urlTodo)) {
         
           link.ctype = getContentType(link.url)
           urlTodo << link
@@ -394,6 +394,8 @@ class Config {
     clone.type    = getType(page, doc, body)
     clone.uniq    = getUnique(page) 
     clone.body    = body.asXML()
+
+    log.debug("Adding ${clone} to hibernate object store")
 
     hb.save(clone)
   }

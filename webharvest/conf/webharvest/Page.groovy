@@ -49,6 +49,21 @@ import org.hibernate.cfg.*
 
   /**********************************************************************/
   /**
+   * Determines if two page objects are the same.  Exclude the anchor in
+   * the url.
+   */
+
+  boolean equals(Object o) {
+    if (o == null) return false
+
+    if (!(o instanceof Page)) return false
+
+    return url.sameFile(o.url)
+  }
+
+
+  /**********************************************************************/
+  /**
    * Get the query params as a map
    */
 
