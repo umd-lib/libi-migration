@@ -425,6 +425,9 @@ class Config {
     log.info('Beginning harvest...')
 
     // Add the base url to the pipeline
+    if (var.baseUrl) {
+      baseUrl = new URL(var.baseUrl)
+    }
     urlTodo << new Page(url:baseUrl, ctype:getContentType(baseUrl))
 
     // Perform any necessary authentication
