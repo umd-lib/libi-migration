@@ -70,7 +70,7 @@ try {
 
   // add command-line vars
   vars.each {
-    (k, v) = it.split('=')
+    (k, v) = it.split('=',2)
     conf.var[k] = v
   }
 
