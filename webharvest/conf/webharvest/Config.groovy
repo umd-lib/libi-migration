@@ -108,7 +108,92 @@ class Config {
    */
 
   public List buildTree(List done) {
-    return ['nodes'] + done
+    def tree = ['nodes']
+
+    // Insert each Page into proper place
+    done.each { buildTree(tree, it); log.debug(tree) }
+
+    return tree
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Insert a Page into the tree of nodes.
+   */
+
+  public void buildTree (List tree, Page page) {
+
+    log.debug("buildTree: ${tree} ${page}")
+
+    def done = false
+
+    // test each of the existing nodes
+    for (def i=1; i < tree.size() && !done; i++) {
+      def c = compare(page, (tree[i] instanceof Page ? tree[i] : tree[i][0]))
+      switch (c) {
+        case -1:
+          // page is a parent of the tested page
+          tree[i] = [page, tree[i]]
+          done = true
+          break
+
+        case 0:
+          // neither parent nor child, do nothing
+          break
+
+        case 1:
+          // page is a child of the tested page
+          if (tree[i] instanceof Page) {
+            tree[i] = [tree[i], page]
+          } else { // List
+            buildTree(tree[i], page)
+          }
+          break
+      }
+    }
+
+    if (!done) { 
+      tree << page 
+    }
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Compare urls for parent, child relationship
+   *
+   * @return -1 if x is parent of y, 0 if no relationship, 1 if x is child of y
+   */
+
+  public int compare (Page x, Page y) {
+    // compare host and port
+    if (x.url.host != y.url.host) { return 0 }
+    if (x.url.port != y.url.port) { return 0 }
+
+    // compare the paths
+    def xp = x.url.path.split('/') as List
+    def yp = y.url.path.split('/') as List
+
+    while (xp.size() > 0 && yp.size() > 0) {
+      if (xp[0] != yp[0]) {
+        return 0;
+      }
+      xp.remove(0)
+      yp.remove(0)
+    }
+
+    // the paths were the same until one ran out first
+    assert xp.size() != 0 || yp.size() != 0
+
+    if (xp.size() == 0) {
+      // x is parent of y
+      return -1
+    } else {
+      // y is parent of x
+      return 1
+    }
+
   }
 
 
