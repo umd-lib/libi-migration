@@ -254,7 +254,7 @@ class Config {
   
       // called only for a 401 (access denied) status code:
       response.'404' = { resp ->  
-        println 'Not found'
+        log.warn("Error 404: not found: ${url}")
       }
     }
 

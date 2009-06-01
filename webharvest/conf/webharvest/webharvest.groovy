@@ -65,7 +65,6 @@ try {
     System.exit(1)
   }
 
-  conf.outfile = outfile
   conf.out = new groovy.xml.MarkupBuilder(outfile) 
   conf.hb = hb
 
