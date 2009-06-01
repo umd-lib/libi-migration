@@ -291,7 +291,19 @@ class Config {
    */
 
   public String getTitle (Page page, Node doc, Node body) {
-    return page.url.toString()
+
+    def l 
+
+    // title element
+    l = doc.selectNodes('/html/head/title');
+    if (l.size() > 0) return l[0].text
+
+    // the first h1
+    l = doc.selectNodes('//h1');
+    if (l.size() > 0) return l[0].text
+
+    // the path part of the url
+    return page.url.path.split('/').join(' ').trim()
   }
 
 
