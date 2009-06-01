@@ -49,7 +49,6 @@ class Config {
   def dr = new DOMReader(df)
   def ds = new DomSerializer(props)
 
-  def outfile = null  // output file
   def out = null      // output MarkupBuilder for xml creation
 
   def urlDone = []  // pages already processed
@@ -411,8 +410,6 @@ class Config {
     if (page.ctype == 'text/html') {
       handleHtml(page);
     }
-
-    outfile.flush()
   }
 
 
