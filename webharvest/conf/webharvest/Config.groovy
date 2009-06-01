@@ -110,7 +110,7 @@ class Config {
     def tree = ['nodes']
 
     // Insert each Page into proper place
-    done.each { buildTree(tree, it); log.debug(tree) }
+    done.each { buildTree(tree, it); log.debug("Tree: ${tree}") }
 
     return tree
   }
@@ -123,7 +123,7 @@ class Config {
 
   public void buildTree (List tree, Page page) {
 
-    log.debug("buildTree: ${tree} ${page}")
+    log.debug("buildTree inserting ${page} into ${tree}")
 
     def done = false
 
@@ -148,6 +148,7 @@ class Config {
           } else { // List
             buildTree(tree[i], page)
           }
+          done = true
           break
       }
     }
