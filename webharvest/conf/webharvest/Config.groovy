@@ -18,6 +18,7 @@ import static groovyx.net.http.ContentType.TEXT
 
 import org.dom4j.Attribute;
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
@@ -204,13 +205,16 @@ class Config {
    */
 
   public Node extractBody(Document doc) {
+    def body = DocumentHelper.createDocument()
+
     def l = doc.selectNodes('/html/body');
 
     def n = (l.size() < 1 ? doc : l[0])
 
     n.name = 'div'
+    body.add(n.clone())
 
-    return n
+    return body
   }
 
 
@@ -375,7 +379,7 @@ class Config {
     def body = extractBody(doc)
 
     if (log.isDebugEnabled()) {
-      log.debug("Extracted body\n${body.asXML()}")
+      log.debug("Extracted body\n${body.getRootElement().asXML()}")
     }
 
     // Process each link
@@ -407,7 +411,7 @@ class Config {
     clone.title   = getTitle(page, doc, body)
     clone.type    = getType(page, doc, body)
     clone.uniq    = getUnique(page) 
-    clone.body    = body.asXML()
+    clone.body    = body.getRootElement().asXML()
 
     log.debug("Adding ${clone} to hibernate object store")
 
