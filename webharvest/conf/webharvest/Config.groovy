@@ -481,6 +481,8 @@ class Config {
    */
 
   public boolean isFollowable(Page page) {
+    if (page.url.query != null) return false;
+
     return page.surl.startsWith(baseUrl.toString())
   }
 
