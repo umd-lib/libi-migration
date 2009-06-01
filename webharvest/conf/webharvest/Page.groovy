@@ -93,6 +93,16 @@ import javax.persistence.Id
 
   /**********************************************************************/
   /**
+   * Get the url with the anchor removed.
+   */
+
+  public URL getUrlNoAnchor() {
+    return new URL(url.protocol, url.host, url.port, url.path)
+  }
+
+
+  /**********************************************************************/
+  /**
    * Set the url; make a string copy for lookup in hibernate.
    */
 

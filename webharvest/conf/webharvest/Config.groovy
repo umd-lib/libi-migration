@@ -310,7 +310,7 @@ class Config {
    */
 
   public String getUnique (Page page) {
-    return page.url.toString()
+    return page.urlNoAnchor.toString()
   }
 
 
@@ -374,6 +374,7 @@ class Config {
       if (isFollowable(link)) {
         // change the link to internal
         node.text = '[[' + getUnique(link) + ']]'
+        if (link.url.ref) node.text += '#' + link.url.ref
 
         // check if link should be queued
         if (!(link in urlDone) && 
