@@ -1,7 +1,8 @@
 package webharvest
 
-import javax.persistence.*
-import org.hibernate.cfg.*
+import javax.persistence.Entity
+import javax.persistence.Id
+
 
 /**
  * A web location.  Not necessarily text/html.
