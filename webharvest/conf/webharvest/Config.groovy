@@ -39,6 +39,8 @@ import org.dom4j.io.DocumentInputSource;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
+import edu.umd.lims.util.ErrorHandling
+
 
 class Config {
   def baseUrl = new URL('http://www.lib.umd.edu/JUNK/ben/webharvest/')
@@ -408,8 +410,14 @@ class Config {
         if (!(link in urlDone) && 
             !(link in urlTodo)) {
         
-          link.ctype = getContentType(link.url)
-          urlTodo << link
+          try {
+            link.ctype = getContentType(link.url)
+            urlTodo << link
+          }
+          catch (Throwable t) {
+            log.error("Error getting Content-Type for link ${link.url}\n" +
+                      ErrorHandling.getStackTrace(t))
+          }            
         }
       }
     }
