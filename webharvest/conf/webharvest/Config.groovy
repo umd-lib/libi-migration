@@ -212,7 +212,7 @@ class Config {
     def l 
     def div
 
-    // first h1 or h2
+    // first h1 or h2 and siblings
     l = doc.selectNodes('//h1|//h2')
     if (l.size() > 0) {
       div = body.addElement('div')
@@ -229,13 +229,25 @@ class Config {
           div.add(e.clone())
         }
       }
-      return body
+
+    } else {
+
+      // the entire body
+      l = doc.selectNodes('/html/body')
+      body = l[0].clone()
+      body.name = 'div'
     }
 
-    // else the entire body
-    l = doc.selectNodes('/html/body')
-    body = l[0].clone()
-    body.name = 'div'
+    // Is there a sidebar we can tack onto the end?
+    log.info('checking sidebar')
+    l = doc.selectNodes('//table//table/tbody/tr/td[h4]')
+    if (l.size() > 0) {
+      log.info('got it')
+      div = l[0].clone()
+      div.name = 'div'
+      div.attributes.each { it.detach() }
+      body.rootElement.add(div)
+    }
 
     return body
   }
