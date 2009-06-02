@@ -69,6 +69,8 @@ class Config {
 
   def count = [:]      // statistics
 
+  def downloaddir = null // download directory
+
 
   /**********************************************************************/
   /**
@@ -239,10 +241,8 @@ class Config {
     }
 
     // Is there a sidebar we can tack onto the end?
-    log.info('checking sidebar')
     l = doc.selectNodes('//table//table/tbody/tr/td[h4]')
     if (l.size() > 0) {
-      log.info('got it')
       div = l[0].clone()
       div.name = 'div'
       div.attributes.each { it.detach() }
@@ -250,6 +250,33 @@ class Config {
     }
 
     return body
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Get the download file name.
+   */
+
+  public File getDownload(Page page) {
+    def x = new File(page.url.file)
+    def name = x.name
+
+    def file = new File(downloaddir, name)
+
+    for (def i=0; file.exists(); i++) {
+      // split into base and extensions
+      def parts = name.split('\\.') as List
+      def base = parts.remove(0)
+
+      // create next name
+      def testname = "${base}_${i}"
+      parts.each { testname += ".${it}" }
+
+      file = new File(downloaddir, testname)
+    }
+
+    return file
   }
 
 
@@ -331,6 +358,10 @@ class Config {
 
   public String getTitle (Page page, Node doc, Node body) {
 
+    if (page.type == 'image') {
+      return new File(page.url.path).name
+    }
+
     def l 
 
     // title element
@@ -352,7 +383,12 @@ class Config {
    */
 
   public String getType (Page page, Node doc, Node body) {
-    return 'folder'
+
+    if (page.ctype.startsWith('image/')) {
+      return 'image'
+    } else {
+      return 'folder'
+    }
   }
 
 
@@ -396,7 +432,7 @@ class Config {
   
       // called only for a 401 (access denied) status code:
       response.'404' = { resp ->  
-        println 'Not found'
+        log.warn("Error 404: not found: ${url}")
       }
     }
 
@@ -444,19 +480,51 @@ class Config {
       }
     }
 
-    // Make a copy of page, add data, save the page
-    def clone = page.clone()
+    savePage(page, doc, body)
+  }
 
-    clone.created = getCreated(page, doc, body)
-    clone.name    = getName(page, doc, body)
-    clone.title   = getTitle(page, doc, body)
-    clone.type    = getType(page, doc, body)
-    clone.uniq    = getUnique(page) 
-    clone.body    = body.getRootElement().asXML()
 
-    log.debug("Adding ${clone} to hibernate object store")
+  /**********************************************************************/
+  /**
+   * Handle one image.
+   */
 
-    hb.save(clone)
+  public void handleImage(Page page) {
+
+    page.download = getDownload(page)
+
+    log.debug("Download file name: ${page.download}")
+
+    def http = new HTTPBuilder(page.url)
+  
+    http.request(GET, BINARY) { req ->
+      headers.'User-Agent' = 'Libi WebHarvest'
+ 
+      // authentication cookies
+      if (! cookies.isEmpty()) {
+        headers.Cookie = cookies.collect{"${it.key}=${it.value}"}.join('; ')
+      }
+
+      response.success = { resp, reader ->
+
+        log.debug("Downloading to ${page.download}")
+
+        page.download << reader
+      }
+  
+      // called only for a 401 (access denied) status code:
+      response.'404' = { resp ->  
+        log.warn("Error 404: not found: ${url}")
+      }
+    }
+
+    def doc = DocumentHelper.createDocument()
+    doc.addElement('html').addElement('body')
+
+    def body = DocumentHelper.createDocument()
+    body.addElement('div')
+    
+    savePage(page, doc, body)
   }
 
 
@@ -469,7 +537,12 @@ class Config {
     log.info("handling url: ${page.url}")
 
     if (page.ctype == 'text/html') {
+      urlDone << page
       handleHtml(page);
+
+    } else if (page.ctype.startsWith('image/')) {
+      urlDone << page
+      handleImage(page)
     }
   }
 
@@ -495,11 +568,7 @@ class Config {
     while (! urlTodo.isEmpty()) {
       def page = urlTodo.remove(0)
 
-      if (page.ctype == 'text/html') {
-        urlDone << page
-
-        handlePage(page) 
-      }
+      handlePage(page) 
 
       count.nodes++
 
@@ -534,6 +603,28 @@ class Config {
 
   /**********************************************************************/
   /**
+   * Output node attributes.
+   */
+
+  public Map outputNodeAttrs(Page page) {
+    def attrs = [
+      created: page.created,
+      name:    page.name,
+      title:   page.title,
+      type:    page.type,
+      unique:  page.uniq
+    ]
+
+    if (page.type == 'image') {
+      attrs.url = page.download.name
+    }
+
+    return attrs
+  }
+
+
+  /**********************************************************************/
+  /**
    * Output nodes.  
    *
    * @param tree a List or a Page for output.  If a list then head must be a String or Page and tail is a list of children consisting of Pages or Lists
@@ -553,11 +644,7 @@ class Config {
         def page = hb.get(Page, head.surl)
     
         // output a node
-        out.node(created: page.created,
-                 name:    page.name,
-                 title:   page.title,
-                 type:    page.type,
-                 unique:  page.uniq)
+        out.node(outputNodeAttrs(page))
         {
           out.data() {
             out.body(page.body)
@@ -572,17 +659,35 @@ class Config {
       def page = hb.get(Page, tree.surl)
     
       // output a node
-      out.node(created: page.created,
-               name:    page.name,
-               title:   page.title,
-               type:    page.type,
-               unique:  page.uniq)
+      out.node(outputNodeAttrs(page))
       {
         out.data() {
           out.body(page.body)
         }
       }
     }
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Save the Page to the hibernate object store.
+   */
+
+  public void savePage(Page page, Document doc, Node body) {
+    // Make a copy of page, add data, save the page
+    def clone = page.clone()
+
+    clone.type    = getType(clone, doc, body)
+    clone.created = getCreated(clone, doc, body)
+    clone.name    = getName(clone, doc, body)
+    clone.title   = getTitle(clone, doc, body)
+    clone.uniq    = getUnique(clone) 
+    clone.body    = body.getRootElement().asXML()
+
+    log.debug("Adding ${clone} to hibernate object store")
+
+    hb.save(clone)
   }
 
 

@@ -26,6 +26,7 @@ import javax.persistence.Id
   public String type     // node type
   public String uniq     // node unique identifier
   public String body     // content body
+  public File download   // downloaded file name
 
 
   /**********************************************************************
@@ -43,6 +44,7 @@ import javax.persistence.Id
     clone.title   = this.title   
     clone.type    = this.type    
     clone.uniq    = this.uniq    
+    clone.download = this.download
 
     return clone
   }

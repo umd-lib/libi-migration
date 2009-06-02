@@ -45,6 +45,21 @@ try {
     log.setPriority(Priority.DEBUG)
   }
 
+  // Setup the download directory
+  downloaddir = new File(workdir, 'download')
+
+  if (downloaddir.exists()) {
+    log.info("Deleting contents of ${downloaddir}")
+    downloaddir.eachFile { it.delete() }
+
+  } else {
+
+    log.info("Creating ${downloaddir}")
+    if (!downloaddir.mkdirs()) {
+      throw new Exception("Error: unable to create ${downloaddir}")
+    }
+  }
+
   // Hibernate for object storage
   hb = configureHibernate()
 
@@ -67,6 +82,7 @@ try {
 
   conf.out = new groovy.xml.MarkupBuilder(outfile) 
   conf.hb = hb
+  conf.downloaddir = downloaddir
 
   // add command-line vars
   vars.each {
