@@ -93,6 +93,15 @@ try {
   // Execute the harvest
   conf.harvest()
 
+  // Remove the hibernate db
+  log.info("Removing hibernate db")
+
+  def db = new File(workdir, 'db')
+  def files = []
+  db.eachFileRecurse { files << it } 
+  files.reverseEach { it.delete() }
+  db.delete()
+
 }
 catch (Throwable t) {
   t.printStackTrace()
