@@ -216,8 +216,18 @@ class Config {
     l = doc.selectNodes('//h1|//h2')
     if (l.size() > 0) {
       div = body.addElement('div')
-      l[0].parent.elements().each {
-        div.add(it.clone())
+
+      l[0].parent.elements().each { e ->
+        def exclude = false
+
+        // check for exclusions
+        if (e.name == 'span' && e.attribute('class')?.value == 'breadcrumbs') {
+          exclude = true
+        }
+
+        if (!exclude) {
+          div.add(e.clone())
+        }
       }
       return body
     }
