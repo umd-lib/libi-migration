@@ -603,10 +603,25 @@ class Config {
 
   /**********************************************************************/
   /**
-   * Output node attributes.
+   * Output nodes.  
+   *
+   * @param tree a List or a Page for output.  If a List then head must be a String or Page and tail is a list of children consisting of Pages or Lists
    */
 
-  public Map outputNodeAttrs(Page page) {
+  public void outputNodes(Object tree) {
+
+    def head = ((tree instanceof List) ? tree.remove(0) : null)
+    def hasChildren = (head != null)
+
+    if (head instanceof String) {
+      out."${head}"() { tree.each {outputNodes(it)} }
+      return
+    }
+
+    // load the page with body back in
+    def page = hb.get(Page, ((hasChildren) ? head.surl : tree.surl))
+    
+    // build the node attributes
     def attrs = [
       created: page.created,
       name:    page.name,
@@ -619,55 +634,16 @@ class Config {
       attrs.url = page.download.name
     }
 
-    return attrs
-  }
-
-
-  /**********************************************************************/
-  /**
-   * Output nodes.  
-   *
-   * @param tree a List or a Page for output.  If a list then head must be a String or Page and tail is a list of children consisting of Pages or Lists
-   */
-
-  public void outputNodes(Object tree) {
-
-    if (tree instanceof List) {
-      def head = tree.remove(0)
-
-      if (head instanceof String) {
-        out."${head}"() { tree.each {outputNodes(it)} }
-
-      } else { // Page
-        
-        // load the page with body back in
-        def page = hb.get(Page, head.surl)
-    
-        // output a node
-        out.node(outputNodeAttrs(page))
-        {
-          out.data() {
-            out.body(page.body)
-          }
-          tree.each {outputNodes(it)}
-        }
+    // output a node
+    out.node(attrs)
+    {
+      out.data() {
+        out.body(page.body)
       }
-
-    } else { // Page
-        
-      // load the page with body back in
-      def page = hb.get(Page, tree.surl)
-    
-      // output a node
-      out.node(outputNodeAttrs(page))
-      {
-        out.data() {
-          out.body(page.body)
-        }
-      }
+      if (hasChildren) tree.each { outputNodes(it) }
     }
   }
-
+ 
 
   /**********************************************************************/
   /**
