@@ -207,12 +207,23 @@ class Config {
   public Node extractBody(Document doc) {
     def body = DocumentHelper.createDocument()
 
-    def l = doc.selectNodes('/html/body');
+    def l 
+    def div
 
-    def n = (l.size() < 1 ? doc : l[0])
+    // first h1 or h2
+    l = doc.selectNodes('//h1|//h2')
+    if (l.size() > 0) {
+      div = body.addElement('div')
+      l[0].parent.elements().each {
+        div.add(it.clone())
+      }
+      return body
+    }
 
-    n.name = 'div'
-    body.add(n.clone())
+    // else the entire body
+    l = doc.selectNodes('/html/body')
+    body = l[0].clone()
+    body.name = 'div'
 
     return body
   }
