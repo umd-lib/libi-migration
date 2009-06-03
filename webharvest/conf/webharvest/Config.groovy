@@ -17,6 +17,7 @@ import static groovyx.net.http.ContentType.BINARY
 import static groovyx.net.http.ContentType.TEXT
 
 import org.dom4j.Attribute;
+import org.dom4j.CharacterData
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper
 import org.dom4j.DocumentException;
@@ -648,12 +649,41 @@ class Config {
     out.node(attrs)
     {
       out.data() {
-        out.body(page.body)
+        if (var.bodyxml) {
+          // output body as xml
+          out.body([xml:'true']) {
+            def bodyx = DocumentHelper.parseText(page.body)
+
+            outputBody(bodyx.getRootElement())
+          }
+        } else {
+          // output body as text
+          out.body(page.body)
+        }
       }
       if (hasChildren) tree.each { outputNodes(it) }
     }
   }
  
+
+  /**********************************************************************/
+  /**
+   * Output the body as XML.
+   */
+
+  public void outputBody(Object node) {
+    if (node instanceof CharacterData) {
+      out.yield(node.text)
+    } else {
+      def attrs = [:]
+      node.attributes.each { attrs[it.name] = it.value }
+
+      out."${node.name}"(attrs) {
+        node.nodeIterator().each { outputBody(it) }
+      }
+    }
+  }
+
 
   /**********************************************************************/
   /**
