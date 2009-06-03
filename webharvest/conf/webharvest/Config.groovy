@@ -464,7 +464,11 @@ class Config {
 
       log.debug("checking link: ${link.url}")
 
-      if (isFollowable(link)) {
+      if (!isFollowable(link)) {
+        // turn the link into an absolute url
+        node.text = link.url.toString()
+
+      } else {
         // change the link to internal
         node.text = '[[' + getUnique(link) + ']]'
         if (link.url.ref) node.text += '#' + link.url.ref
