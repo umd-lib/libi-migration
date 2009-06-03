@@ -241,7 +241,7 @@ class Config {
     }
 
     // Is there a sidebar we can tack onto the end?
-    l = doc.selectNodes('//table//table/tbody/tr/td[h4]')
+    l = doc.selectNodes("//table//table/tbody/tr/td[h4]|//table//table/tbody/tr/td[span[@class='leftcol_heading']]")
     if (l.size() > 0) {
       div = l[0].clone()
       div.name = 'div'
