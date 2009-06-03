@@ -101,14 +101,14 @@ class PmItd extends Config {
    * Extract the content body from the html.
    */
 
-  public Node extractBody(Document doc) {
-    def n = DocumentHelper.createDocument()
+  public Document extractBody(Document doc) {
+    def body = DocumentHelper.createDocument()
 
     def l = doc.selectNodes("//div[@id='wikitext']");
 
-    l.each { n.add(it.clone()) }
+    l.each { body.add(it.clone()) }
 
-    return n
+    return body
   }
 
 

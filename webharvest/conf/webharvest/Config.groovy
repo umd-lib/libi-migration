@@ -208,7 +208,7 @@ class Config {
    * the html body element.
    */
 
-  public Node extractBody(Document doc) {
+  public Document extractBody(Document doc) {
     def body = DocumentHelper.createDocument()
 
     def l 
@@ -236,8 +236,9 @@ class Config {
 
       // the entire body
       l = doc.selectNodes('/html/body')
-      body = l[0].clone()
-      body.name = 'div'
+      div = l[0].clone()
+      div.name = 'div'
+      body.add(div)
     }
 
     // Is there a sidebar we can tack onto the end?
