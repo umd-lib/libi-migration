@@ -376,7 +376,9 @@ class Config {
 
     // title element
     l = doc.selectNodes('/html/head/title');
-    if (l.size() > 0) return l[0].text
+    if (l.size() > 0) {
+      return l[0].text.trim().replaceAll(', UM Libraries$','')
+    }
 
     // the first h1
     l = doc.selectNodes('//h1');
