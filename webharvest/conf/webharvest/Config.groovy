@@ -97,6 +97,8 @@ class Config {
    */
 
   public URL buildUrl(URL baseUrl, String rel) {
+    rel = rel.replaceAll(' ','%20')
+
     def url = new URL(baseUrl, rel);
 
     if (url.path.endsWith('/index.html')) {
