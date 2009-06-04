@@ -368,7 +368,7 @@ class Config {
 
   public String getTitle (Page page, Node doc, Node body) {
 
-    if (page.type == 'image') {
+    if (page.download) {
       return new File(page.url.path).name
     }
 
@@ -502,10 +502,10 @@ class Config {
 
   /**********************************************************************/
   /**
-   * Handle one image.
+   * Handle a file for download.
    */
 
-  public void handleImage(Page page) {
+  public void handleFile(Page page) {
 
     page.download = getDownload(page)
 
@@ -556,9 +556,9 @@ class Config {
       urlDone << page
       handleHtml(page);
 
-    } else if (page.ctype.startsWith('image/')) {
+    } else if (!page.ctype.startsWith('unknown/')) {
       urlDone << page
-      handleImage(page)
+      handleFile(page)
     }
   }
 
@@ -653,7 +653,9 @@ class Config {
     // output a node
     out.node(attrs)
     {
+      // data
       out.data() {
+        // body
         if (var.bodyxml) {
           // output body as xml
           out.body([xml:'true']) {
@@ -665,7 +667,15 @@ class Config {
           // output body as text
           out.body(page.body)
         }
+
+        // attachments
+        if (page.download && page.type != 'image') {
+          out.attachment(unique:"attachment-${page.uniq}",
+                         url:page.download.name)
+        }
       }
+
+      // children
       if (hasChildren) tree.each { outputNodes(it) }
     }
   }
