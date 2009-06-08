@@ -110,11 +110,11 @@ class Config {
 
     def url = new URL(baseUrl, rel);
 
+    url = buildUrlRedirect(url)
+
     if (url.path.endsWith('/index.html')) {
       url = new URL(url, './')
     }
-
-    url = buildUrlRedirect(url)
 
     // cache the result
     buildUrls.orig = url
