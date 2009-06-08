@@ -72,6 +72,8 @@ class Config {
 
   def downloaddir = null // download directory
 
+  def buildUrls = [:]  // cache of normalized (buildUrl) urls
+
 
   /**********************************************************************/
   /**
@@ -80,6 +82,8 @@ class Config {
 
   public Config() {
     count.nodes = 0
+
+    HttpURLConnection.followRedirects = false
   }
 
 
@@ -97,12 +101,62 @@ class Config {
    */
 
   public URL buildUrl(URL baseUrl, String rel) {
+    def orig = new URL(baseUrl, rel);
+
+    // check the cache
+    if (orig in buildUrls) return buildUrls.orig
+
     rel = rel.replaceAll(' ','%20')
 
     def url = new URL(baseUrl, rel);
 
     if (url.path.endsWith('/index.html')) {
       url = new URL(url, './')
+    }
+
+    url = buildUrlRedirect(url)
+
+    // cache the result
+    buildUrls.orig = url
+
+    return url
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Build a new url. Follow server redirects to get the correct url.
+   */
+
+  public URL buildUrlRedirect(URL url) {
+    log.debug("checking for url redirects: ${url}")
+
+    def done = false
+
+    // loop as long as we continue to get a redirect
+    while (!done) {
+      done = true
+
+      // make an http HEAD call
+      def h = url.openConnection()
+      if (h instanceof HttpURLConnection) {
+        h.requestMethod = 'HEAD'
+        h.connect()
+
+        if (h.responseCode in (300..399) && h.headerFields.Location) {
+          // we got a redirect
+          done = false
+
+          // get the new url
+          def loc = h.headerFields.Location.toString()
+          loc = loc.substring(1, loc.length()-1)
+          def redirect = new URL(loc)
+
+          log.debug("${url} redirected to ${redirect}")
+
+          url = redirect
+        }
+      }
     }
 
     return url
