@@ -1,5 +1,9 @@
 package webharvest
 
+import javax.xml.transform.TransformerFactory
+import javax.xml.transform.dom.DOMSource
+import javax.xml.transform.stream.StreamResult
+
 import groovy.xml.MarkupBuilder
 
 import org.htmlcleaner.CleanerProperties
@@ -509,9 +513,28 @@ class Config {
       log.debug("Cleaned page:\n" + sw.getBuffer().toString())
     }
 
-    // Convert to dom4j document
-    doc = dr.read(ds.createDOM(doc))
-      
+    // Convert to HtmlCleaner to org.w3c.dom.Document
+    def dom = ds.createDOM(doc)
+
+    if (log.isDebugEnabled()) {
+
+      def transformerFactory = TransformerFactory.newInstance()
+      def transformer = transformerFactory.newTransformer()
+      def source = new DOMSource(dom)
+      def sw = new StringWriter()
+      def result =  new StreamResult(sw)
+      transformer.transform(source, result)    
+
+      log.debug("DOM doc:\n${sw}")
+    }
+
+    // Convert org.ww3c.dom.Document to org.dom4j.Document
+    doc = dr.read(dom)
+    
+    if (log.isDebugEnabled()) {
+      log.debug("dom4j doc:\n${doc.getRootElement().asXML()}")
+    }
+
     // Extract the content body from the html
     def body = extractBody(doc)
 
