@@ -78,6 +78,8 @@ class Config {
 
   def buildUrls = [:]  // cache of normalized (buildUrl) urls
 
+  def ctypes = [:]     // cache of content types per url
+
 
   /**********************************************************************/
   /**
@@ -159,6 +161,19 @@ class Config {
           log.debug("${url} redirected to ${redirect}")
 
           url = redirect
+
+        } else {
+          // no redirect; cache the content type
+          if (h.responseCode in (400..499)) {
+            ctypes[url] = 'unknown/notfound'
+          } else {
+            if (h.headerFields.'Content-Type') {
+              def ctype = null
+              (ctype) = h.headerFields.'Content-Type'.toString().split(';')
+              ctype = ctype.substring(1, ctype.length()-1)
+              ctypes[url] = ctype
+            }
+          }
         }
       }
     }
@@ -401,34 +416,44 @@ class Config {
 
   public String getContentType(URL url) {
 
-    def http = new HTTPBuilder(url)
-
     def ctype = null
 
-    // make an http HEAD call
-    http.request(HEAD) { req ->
-      headers.'User-Agent' = 'Libi WebHarvest'
-  
-      response.success = { resp, reader ->
-        // resp.statusLine
-        // resp.statusLine.statusCode
-        // resp.headers.each {println it}
+    // check the cache
+    if (ctypes.containsKey(url)) {
+      log.debug('Content-Type cache hit')
+      ctype = ctypes[url]
 
-        if (resp.headers.'Content-Type') {
-          (ctype) = resp.headers.'Content-Type'.split(';')
+    } else {
+
+      def http = new HTTPBuilder(url)
+
+      // make an http HEAD call
+      http.request(HEAD) { req ->
+        headers.'User-Agent' = 'Libi WebHarvest'
+  
+        response.success = { resp, reader ->
+          // resp.statusLine
+          // resp.statusLine.statusCode
+          // resp.headers.each {println it}
+
+          if (resp.headers.'Content-Type') {
+            (ctype) = resp.headers.'Content-Type'.split(';')
+          }
+
+          // reader
         }
-
-        // reader
-      }
   
-      // called only for a 401 (access denied) status code:
-      response.'404' = { resp ->  
-        log.warn("Error 404: not found: ${url}")
-        ctype = 'unknown/notfound'
+        // called only for a 401 (access denied) status code:
+        response.'404' = { resp ->  
+          log.warn("Error 404: not found: ${url}")
+          ctype = 'unknown/notfound'
+        }
       }
+
+      // add to the cache
+      ctypes[url] = ctype
     }
 
-    
     log.debug("Content-Type: ${ctype}")
 
     return ctype;
