@@ -331,8 +331,8 @@ class Config {
     def l 
     def div
 
-    // first h1 or h2 and siblings
-    l = doc.selectNodes('//h1|//h2')
+    // first, try to recognize some patterns
+    l = doc.selectNodes("//h1|//h2|//span[@class='breadcrumbs']")
     if (l.size() > 0) {
       div = body.addElement('div')
 
