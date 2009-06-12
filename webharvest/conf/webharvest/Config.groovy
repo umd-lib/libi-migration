@@ -170,7 +170,7 @@ class Config {
             if (h.headerFields.'Content-Type') {
               def ctype = null
               (ctype) = h.headerFields.'Content-Type'.toString().split(';')
-              ctype = ctype.substring(1, ctype.length()-1)
+              ctype = ctype.replace('[','').replace(']','')
               ctypes[url] = ctype
             }
           }
