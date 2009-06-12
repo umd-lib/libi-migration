@@ -336,7 +336,7 @@ class Config {
     if (l.size() > 0) {
       div = body.addElement('div')
 
-      l[0].parent.elements().each { e ->
+      l[0].parent.content().each { e ->
         def exclude = false
 
         // check for exclusions
