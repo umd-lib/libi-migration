@@ -69,9 +69,9 @@ try {
     // name of the class, but it's been a nightmare.  I'm punting.
     switch (config) {
       case 'Config':      conf = new webharvest.Config(); break
-      case 'ConfigTest':  conf = new webharvest.ConfigTest(); break
-      case 'PmItd':       conf = new webharvest.PmItd(); break
-      case 'la':          conf = new webharvest.la(); break
+      case 'test':        conf = new webharvest.ConfigTest(); break
+      case 'pmitd':       conf = new webharvest.PmItd(); break
+      case 'la':          conf = new webharvest.LibraryAssembly(); break
       default: throw new Exception("Error: unknown config: ${config}")
     }
   }

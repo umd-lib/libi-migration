@@ -5,9 +5,9 @@ import org.apache.log4j.Logger;
 import org.dom4j.Node
 
 
-class la extends Config {
+class LibraryAssembly extends Config {
 
-  def private static log = Logger.getInstance(la.getName());
+  def private static log = Logger.getInstance(LibraryAssembly.getName());
 
 
   /**********************************************************************/
@@ -15,7 +15,7 @@ class la extends Config {
    * Constructor.
    */
 
-  public la() {
+  public LibraryAssembly() {
     super()
 
     baseUrl = new URL('http://www.lib.umd.edu/groups/la/')
