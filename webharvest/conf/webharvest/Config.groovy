@@ -140,7 +140,7 @@ class Config {
     def done = false
 
     // loop as long as we continue to get a redirect
-    while (!done) {
+    while (!done && isFollowable(new Page(url:url))) {
       done = true
 
       // make an http HEAD call
