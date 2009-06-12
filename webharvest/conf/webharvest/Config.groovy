@@ -227,6 +227,32 @@ class Config {
 
   /**********************************************************************/
   /**
+   * Cleanup the doc after all else and it has been converted to a string.
+   */
+
+  public String cleanupBodyPost (String body) {
+    def origbody = body
+    def newbody = null
+    def changed = true
+
+    while (changed) {
+      newbody = body.replace('&amp;amp;','&amp;').replace('&amp;apos;','&apos;')
+
+      changed = (newbody != body)
+
+      body = newbody
+    }
+
+    if (log.isDebugEnabled() && origbody != newbody) {
+      log.debug("Post cleaned up body:\n${newbody}")
+    }
+
+    return newbody
+  }
+
+
+  /**********************************************************************/
+  /**
    * Cleanup the doc delivered by HtmlCleaner
    */
 
@@ -809,7 +835,7 @@ class Config {
     clone.name    = getName(clone, doc, body)
     clone.title   = getTitle(clone, doc, body)
     clone.uniq    = getUnique(clone) 
-    clone.body    = body.getRootElement().asXML()
+    clone.body    = cleanupBodyPost(body.getRootElement().asXML())
 
     log.debug("Adding ${clone} to hibernate object store")
 
