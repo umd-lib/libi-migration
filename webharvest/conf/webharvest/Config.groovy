@@ -368,7 +368,7 @@ class Config {
 
   public File getDownload(Page page) {
     def x = new File(page.url.file)
-    def name = x.name
+    def name = x.name.replace('%20','_')
 
     def file = new File(downloaddir, name)
 
