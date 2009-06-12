@@ -352,11 +352,6 @@ class Config {
       body.rootElement.add(div)
     }
 
-    // Update header tags
-    def static hmap = [h1:'h2',h2:'h3',h3:'h4',h5:'h4',h6:'h4']
-    l = body.selectNodes('//h1|//h2|//h3|//h5|//h6')
-    l.each { it.name = hmap[it.name] }
-
     return body
   }
 
