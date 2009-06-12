@@ -147,7 +147,15 @@ class Config {
       def h = url.openConnection()
       if (h instanceof HttpURLConnection) {
         h.requestMethod = 'HEAD'
-        h.connect()
+        h.connectTimeout = 10000
+
+        try {
+          h.connect()
+        }
+        catch (SocketTimeoutException e) {
+          log.warn("Timeout following url: ${url}")
+          return url
+        }
 
         if (h.responseCode in (300..399) && h.headerFields.Location) {
           // we got a redirect
