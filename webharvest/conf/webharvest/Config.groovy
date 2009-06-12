@@ -227,6 +227,21 @@ class Config {
 
   /**********************************************************************/
   /**
+   * Cleanup the doc delivered by HtmlCleaner
+   */
+
+  public void cleanupDoc (Object node) {
+    if (node instanceof CharacterData) {
+      // This is a stub for future work
+      //log.debug("text: ${node.text}")
+    } else {
+      node.nodeIterator().each { cleanupDoc(it) }
+    }
+  }
+
+
+  /**********************************************************************/
+  /**
    * Compare urls for parent, child relationship
    *
    * @return -1 if x is parent of y, 0 if no relationship, 1 if x is child of y
@@ -534,6 +549,9 @@ class Config {
     if (log.isDebugEnabled()) {
       log.debug("dom4j doc:\n${doc.getRootElement().asXML()}")
     }
+
+    // Cleanup the doc
+    cleanupDoc(doc)
 
     // Extract the content body from the html
     def body = extractBody(doc)
