@@ -110,7 +110,7 @@ class Config {
     def orig = new URL(baseUrl, rel);
 
     // check the cache
-    if (orig in buildUrls) return buildUrls.orig
+    if (buildUrls.containsKey(orig)) return buildUrls[orig]
 
     rel = rel.replaceAll(' ','%20')
 
@@ -123,7 +123,7 @@ class Config {
     }
 
     // cache the result
-    buildUrls.orig = url
+    buildUrls[orig] = url
 
     return url
   }
