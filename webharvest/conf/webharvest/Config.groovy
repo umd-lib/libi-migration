@@ -492,16 +492,21 @@ class Config {
     }
 
     def l 
+    def title
+
+    // the first h1
+    l = body.selectNodes('//h1');
+    if (l.size() > 0) {
+      title = l[0].text
+      l[0].detach()
+      return title
+    }
 
     // title element
     l = doc.selectNodes('/html/head/title');
     if (l.size() > 0) {
       return l[0].text.trim().replaceAll(', UM Libraries$','')
     }
-
-    // the first h1
-    l = doc.selectNodes('//h1');
-    if (l.size() > 0) return l[0].text
 
     // the path part of the url
     return page.url.path.split('/').join(' ').trim()
