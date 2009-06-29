@@ -76,7 +76,7 @@ class Node:
                 attach = document.createElement("attachment")
                 data.appendChild(attach)
                 attach.setAttribute("url", i[0].replace(self.attachments_path,''))
-                attach.setAttribute("unique", i[1])
+                attach.setAttribute("unique", i[1].replace(self.attachments_path,''))
         for i in self.children:
             nodeList[i].xml(document, node, nodeList)
         return document

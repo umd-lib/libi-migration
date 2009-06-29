@@ -181,7 +181,7 @@ def fix_internal_processed(content, prefix, attachment_path):
         \"
         """, re.VERBOSE)
     attachment_path = attachment_path.partition('/')[0]
-    content = re.sub(pattern, r'[[attachment-' + attachment_path + r'/\g<content>]]"', content, 0)
+    content = re.sub(pattern, r'[[attachment-\g<content>]]"', content, 0)
     
     f = open('temporary', 'w')
     f.write(content)
