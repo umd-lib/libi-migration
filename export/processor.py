@@ -20,7 +20,7 @@ class Processor:
             self.printNode(self.nodes[i], spaces + " ")
 
     def processChildren(self, silent):
-        rootNode = node.Node(self.prefix, "", "")
+        rootNode = node.Node(self.prefix, "", "", "")
         rootNode.unique = self.prefix
         for name, curNode in self.nodes.iteritems():
             if curNode.parent != '':
@@ -41,10 +41,10 @@ class Processor:
             curNode.author = re.compile('.*author=\"([^\"]*)\".*').match(line).group(1)
             curNode.date = datetime.fromtimestamp(int(re.compile('.*date=\"([^\"]*)\".*').match(line).group(1))).strftime("%Y-%m-%d %H:%S:%M")
 
-    def process(self, path, name, attachment_path):
+    def process(self, path, name, attachment_path, attachments_path):
         buffer = open(path)
         content = ""
-        curNode = node.Node(name, content, "")
+        curNode = node.Node(name, content, "", attachments_path)
         for line in buffer:
             if "META" in line:
                 self.processMeta(curNode, line)
@@ -88,6 +88,6 @@ class Processor:
                 attachment_path = ""
                 if f.replace('.txt','') in attachments:
                     attachment_path = os.path.join(attachments_path, f.replace('.txt',''))
-                self.process(os.path.join(directory, f), f.replace('.txt',''), attachment_path)
+                self.process(os.path.join(directory, f), f.replace('.txt',''), attachment_path, attachments_path)
         self.processChildren(silent)
         

@@ -19,8 +19,9 @@ class Node:
     children = []
     childCommentNodes = []
     attachments = []
-
-    def __init__(self, name, content, parent):
+    attachments_path = ""
+    
+    def __init__(self, name, content, parent, attachments_path):
         self.name = name
         self.old_content = content
         self.content = content
@@ -34,7 +35,8 @@ class Node:
         self.childCommentNodes = []
         self.categories = []
         self.attachments = []
-    
+        self.attachments_path = attachments_path
+        
     def __str__(self):
         return "Node name: " + self.name + \
             ", node parent: " + self.parent + \
@@ -73,7 +75,7 @@ class Node:
             for i in self.attachments:
                 attach = document.createElement("attachment")
                 data.appendChild(attach)
-                attach.setAttribute("url", i[0])
+                attach.setAttribute("url", i[0].replace(self.attachments_path,''))
                 attach.setAttribute("unique", i[1])
         for i in self.children:
             nodeList[i].xml(document, node, nodeList)
