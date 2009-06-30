@@ -4,6 +4,12 @@ package webharvest
 
 import javax.persistence.Entity
 
+import javax.xml.transform.Transformer
+import javax.xml.transform.TransformerFactory
+
+import javax.xml.transform.stream.StreamSource 
+import javax.xml.transform.stream.StreamResult 
+
 import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 
@@ -36,6 +42,8 @@ parseCommandLine()
 
 try {
  
+  tFactory = TransformerFactory.newInstance()
+
   // Setup logging
   System.setProperty('log4j.configuration', 'log4j.properties')
 
@@ -82,7 +90,7 @@ try {
     System.exit(1)
   }
 
-  conf.out = new groovy.xml.MarkupBuilder(outfile) 
+  conf.out = new groovy.xml.MarkupBuilder(outfilew) 
   conf.hb = hb
   conf.downloaddir = downloaddir
 
@@ -94,6 +102,13 @@ try {
 
   // Execute the harvest
   conf.harvest()
+
+  // Report the results
+  trans = tFactory.newTransformer(new StreamSource(new File('conf/report.xsl')))
+  source = new StreamSource(outfile)
+  result = new StreamResult(System.out)
+  trans.transform(source, result)
+  
 
   // Remove the hibernate db
   log.info("Removing hibernate db")
@@ -220,7 +235,7 @@ def parseCommandLine() {
     printUsage(options, "Error: Unable to write to ${outfile}")
   }
 
-  outfile = new OutputStreamWriter(new FileOutputStream(outfile))
+  outfilew = new OutputStreamWriter(new FileOutputStream(outfile))
 
 
   // debug
