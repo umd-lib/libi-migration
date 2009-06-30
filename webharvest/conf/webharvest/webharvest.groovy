@@ -46,7 +46,7 @@ try {
   }
 
   // Setup the download directory
-  downloaddir = new File(workdir, 'download')
+  downloaddir = new File(workdir, 'files')
 
   if (downloaddir.exists()) {
     log.info("Deleting contents of ${downloaddir}")
@@ -213,7 +213,7 @@ def parseCommandLine() {
   if (cmd.hasOption('o')) {
     outfile = cmd.getOptionObject('o')
   } else {
-    outfile = new File(workdir, 'out.xml')
+    outfile = new File(workdir, 'nodes.xml')
   }
 
   if (outfile.exists() && ! outfile.canWrite()) {
