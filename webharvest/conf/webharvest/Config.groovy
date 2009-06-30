@@ -107,7 +107,13 @@ class Config {
    */
 
   public URL buildUrl(URL baseUrl, String rel) {
-    def orig = new URL(baseUrl, rel);
+    def orig = null
+    try {
+      orig = new URL(baseUrl, rel);
+    }
+    catch (Exception e) {
+      return new URL("http://invalid.url/${rel}")
+    }
 
     // check the cache
     if (buildUrls.containsKey(orig)) return buildUrls[orig]
