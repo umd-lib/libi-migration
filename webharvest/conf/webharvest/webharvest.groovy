@@ -72,6 +72,7 @@ try {
       case 'test':        conf = new webharvest.ConfigTest(); break
       case 'pmitd':       conf = new webharvest.PmItd(); break
       case 'la':          conf = new webharvest.LibraryAssembly(); break
+      case 'tsd':         conf = new webharvest.TSD(); break
       default: throw new Exception("Error: unknown config: ${config}")
     }
   }
