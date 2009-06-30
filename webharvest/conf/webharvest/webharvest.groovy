@@ -68,7 +68,7 @@ try {
     // We should be able to dynamically load a class from a string
     // name of the class, but it's been a nightmare.  I'm punting.
     switch (config) {
-      case 'Config':      conf = new webharvest.Config(); break
+      case 'config':      conf = new webharvest.Config(); break
       case 'test':        conf = new webharvest.ConfigTest(); break
       case 'pmitd':       conf = new webharvest.PmItd(); break
       case 'la':          conf = new webharvest.LibraryAssembly(); break
@@ -197,13 +197,13 @@ def parseCommandLine() {
   // config
   config = (cmd.hasOption('c')
             ? cmd.getOptionObject('c')
-            : 'Config'
+            : 'config'
             )
 
   // workdir
   workdir = (cmd.hasOption('w')
              ? cmd.getOptionObject('w')
-             : new File('work')
+             : new File("work/${config}")
              )
   if (! workdir.isDirectory() || ! workdir.canWrite()) {
     printUsage(options, "Error: Can't write to directory '${workdir}'")
