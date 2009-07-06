@@ -62,7 +62,8 @@ class Config {
   def urlDone = []  // pages already processed
   def urlTodo = []  // pages waiting to be processed
 
-  def cookies = [:] // cookies need for authentication
+  def cookies = [:]     // cookies need for authentication
+  def authHeaders = [:] // other headers needed for authentication
 
   def followUrl = [:]  // cache of urls checked for following
 
@@ -445,6 +446,15 @@ class Config {
       http.request(HEAD) { req ->
         headers.'User-Agent' = 'Libi WebHarvest'
   
+        // authentication cookies/headers
+        if (! cookies.isEmpty()) {
+          headers.Cookie = cookies.collect{"${it.key}=${it.value}"}.join('; ')
+        }
+
+        authHeaders.each {
+          headers[it.key] = it.value
+        }
+
         response.success = { resp, reader ->
           // resp.statusLine
           // resp.statusLine.statusCode
@@ -567,9 +577,12 @@ class Config {
     http.request(GET, BINARY) { req ->
       headers.'User-Agent' = 'Libi WebHarvest'
  
-      // authentication cookies
+      // authentication cookies/headers
       if (! cookies.isEmpty()) {
         headers.Cookie = cookies.collect{"${it.key}=${it.value}"}.join('; ')
+      }
+      authHeaders.each {
+        headers[it.key] = it.value
       }
 
       response.success = { resp, reader ->
@@ -731,14 +744,14 @@ class Config {
   public void harvest() {
     log.info('Beginning harvest...')
 
+    // Perform any necessary authentication
+    authenticate()
+
     // Add the base url to the pipeline
     if (var.baseUrl) {
       baseUrl = new URL(var.baseUrl)
     }
     urlTodo << new Page(url:baseUrl, ctype:getContentType(baseUrl))
-
-    // Perform any necessary authentication
-    authenticate()
 
     // Iterate over the urls to process
     while (! urlTodo.isEmpty()) {
