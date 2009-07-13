@@ -179,15 +179,11 @@ class Config {
 
         } else {
           // no redirect; cache the content type
-          if (h.responseCode in (400..499)) {
-            ctypes[url] = 'unknown/notfound'
-          } else {
-            if (h.headerFields.'Content-Type') {
-              def ctype = null
-              (ctype) = h.headerFields.'Content-Type'.toString().split(';')
-              ctype = ctype.replace('[','').replace(']','')
-              ctypes[url] = ctype
-            }
+          if (! (h.responseCode in (400..499)) && h.headerFields.'Content-Type') {
+            def ctype = null
+            (ctype) = h.headerFields.'Content-Type'.toString().split(';')
+            ctype = ctype.replace('[','').replace(']','')
+            ctypes[url] = ctype
           }
         }
       }
