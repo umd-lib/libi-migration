@@ -37,6 +37,16 @@ import org.hibernate.cfg.AnnotationConfiguration
 // Load necessary annotation classes
 @Entity class Foo {}
 
+// We should be able to dynamically load a class from a string
+// name of the class, but it's been a nightmare.  I'm punting.
+configs = [
+  config:   new webharvest.Config(),
+  test:     new webharvest.ConfigTest(),
+  pmitd:    new webharvest.PmItd(),
+  la:       new webharvest.LibraryAssembly(),
+  tsd:      new webharvest.TSD(),
+  itd:      new webharvest.ITD(),
+]
 
 parseCommandLine()
 
@@ -71,26 +81,7 @@ try {
   // Hibernate for object storage
   hb = configureHibernate()
 
-  // Create the configuration object
-  try {
-    // We should be able to dynamically load a class from a string
-    // name of the class, but it's been a nightmare.  I'm punting.
-    switch (config) {
-      case 'config':      conf = new webharvest.Config(); break
-      case 'test':        conf = new webharvest.ConfigTest(); break
-      case 'pmitd':       conf = new webharvest.PmItd(); break
-      case 'la':          conf = new webharvest.LibraryAssembly(); break
-      case 'tsd':         conf = new webharvest.TSD(); break
-      case 'itd':         conf = new webharvest.ITD(); break
-      default: throw new Exception("Error: unknown config: ${config}")
-    }
-  }
-  catch (Throwable t) {
-    println "Error: unable to instanciate ${config} class\n"
-    t.printStackTrace()
-    System.exit(1)
-  }
-
+  // Setup the config
   conf.out = new groovy.xml.MarkupBuilder(outfilew) 
   conf.hb = hb
   conf.downloaddir = downloaddir
@@ -215,6 +206,11 @@ def parseCommandLine() {
             ? cmd.getOptionObject('c')
             : 'config'
             )
+  if (configs.containsKey(config)) {
+      conf = configs[config]
+  } else {
+    printUsage(options, "Error: unknown config: ${config}")
+  }
 
   // workdir
   workdir = (cmd.hasOption('w')
