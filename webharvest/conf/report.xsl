@@ -34,7 +34,9 @@
     <xsl:for-each select="./node">
       <xsl:value-of select="$indent"/>
       <xsl:value-of select="@unique"/>
-      <xsl:text>&#10;</xsl:text>
+      <xsl:text> (</xsl:text>
+      <xsl:value-of select="@title"/>
+      <xsl:text>)&#10;</xsl:text>
 
       <xsl:call-template name="listNodes">
         <xsl:with-param name="indent" select="concat($indent, '  ')"/>

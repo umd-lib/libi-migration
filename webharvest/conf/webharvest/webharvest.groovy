@@ -98,6 +98,7 @@ try {
 
   // Report the results
   trans = tFactory.newTransformer(new StreamSource(new File('conf/report.xsl')))
+  if (conf.var.list == 'true') trans.setParameter('list','true')
   source = new StreamSource(outfile)
   result = new StreamResult(System.out)
   trans.transform(source, result)
