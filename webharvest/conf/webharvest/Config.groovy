@@ -81,6 +81,8 @@ class Config {
 
   def ctypes = [:]     // cache of content types per url
 
+  def followable = null // tree (include/exclude) of regexes
+
 
   /**********************************************************************/
   /**
@@ -640,7 +642,10 @@ class Config {
 
       log.debug("checking link: ${link.url}")
 
-      if (!isFollowable(link)) {
+      def follow = isFollowable(link)
+      log.debug("isFollowable: ${follow}")
+
+      if (!follow) {
         // turn the link into an absolute url
         node.text = link.url.toString()
 
@@ -782,7 +787,42 @@ class Config {
   public boolean isFollowable(Page page) {
     if (page.url.query != null) return false;
 
+    if (followable) {
+      return isFollowableConf(page, followable)
+    }
+
     return page.surl.startsWith(baseUrl.toString())
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Determine if a url should be followed based on a configured list
+   * of regexes which indicate include or exclude.
+   */
+
+  public boolean isFollowableConf(Page page, List f, include = true) {
+
+    // default return value
+    def ret = !include
+
+    // iterate over the regexes
+    f.each { match ->
+      // get the regex and exception list
+      def regex =      (match instanceof List ? match.head() : match)
+      def exceptions = (match instanceof List ? match.tail() : null)
+
+      // check for a match
+      if (page.url.toString() ==~ regex) {
+        // set the return value
+        ret = (!exceptions ? include : isFollowableConf(page, exceptions, !include))
+
+        // break out of the loop
+        return
+      }
+    }
+
+    return ret
   }
 
 

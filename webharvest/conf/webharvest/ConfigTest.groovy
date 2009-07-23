@@ -1,8 +1,13 @@
 package webharvest
 
+import org.apache.log4j.Logger;
+
 import org.dom4j.Node
 
 class ConfigTest extends Config {
+
+  def private log = Logger.getInstance(ConfigTest.getName());
+
 
   /**
    * Constructor.
@@ -12,17 +17,13 @@ class ConfigTest extends Config {
     super()
 
     baseUrl = new URL('http://www.lib.umd.edu/JUNK/ben/webharvest/')
+
+    followable = [
+      'abc',
+      'xyz',
+      ['^http://www.lib.umd.edu/JUNK/ben/webharvest/.*',   // incl
+        ['.*frombellow.*']                                 // excl
+      ]
+    ]
   }
-
-
-  /**********************************************************************/
-  /**
-   * Get title of the doc.
-   */
-
-  public String titlex (URL url, Node doc, Node body) {
-    return 'foobar'
-  }
-
-  public String getName(Page page, Node doc, Node body) { return 'xyz' }
 }
