@@ -256,6 +256,21 @@ def printUsage(Options options, Object[] args) {
   formatter = new HelpFormatter()
   formatter.printHelp("webharvest [-c <configfile> -o <outfile> -w <workdir> -d -h] [var=value var=value...]\n", options)
 
+  // display the config list
+  println ''
+  configs.keySet().sort().each() { key ->
+    config = configs[key]
+
+    println " ${key}"
+
+    // display configuration
+    println "   baseUrl: ${config.baseUrl}"
+    config.var.keySet().sort().each() {
+      println "   ${it}: ${config.var[it]}"
+    }
+    println ''
+  }
+
   System.exit(1)
 }
 
