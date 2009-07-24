@@ -46,7 +46,12 @@ class irst extends Config {
     l = body.selectNodes('//h2/font|//h2');
     if (l.size() > 0) {
       title = l[0].text
-      l[0].detach()
+      if (l[0].name == 'font') {
+        l[0].parent.detach()
+      } else {
+        l[0].detach()
+      }
+      body.selectNodes('//h1').each { it.name = 'p' }
       return title
     }
 
