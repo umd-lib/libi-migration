@@ -26,4 +26,46 @@ class irst extends Config {
       ]
     ]
   }
+
+
+  /**********************************************************************/
+  /**
+   * Get title of the doc.
+   */
+
+  public String getTitle (Page page, Node doc, Node body) {
+
+    if (page.download) {
+      return new File(URLDecoder.decode(page.url.path,'UTF-8')).name
+    }
+
+    def l 
+    def title
+
+    // the first h2
+    l = body.selectNodes('//h2/font|//h2');
+    if (l.size() > 0) {
+      title = l[0].text
+      l[0].detach()
+      return title
+    }
+
+    // the first h1
+    l = body.selectNodes('//h1');
+    if (l.size() > 0) {
+      title = l[0].text
+      l[0].detach()
+      return title
+    }
+
+    // title element
+    l = doc.selectNodes('/html/head/title');
+    if (l.size() > 0) {
+      return l[0].text.trim().replaceAll(', UM Libraries$','')
+    }
+
+    // the path part of the url
+    return page.url.path.split('/').join(' ').trim()
+  }
+
 }
