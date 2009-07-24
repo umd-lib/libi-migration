@@ -380,6 +380,13 @@ class Config {
       body.rootElement.add(div)
     }
 
+    // remove all comments
+    l = body.selectNodes("//comment()")
+    l.each { e ->
+      log.debug("stripping comment: ${e.text}")
+      e.detach()
+    }
+    
     return body
   }
 
