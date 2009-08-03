@@ -43,6 +43,11 @@ class PmItd extends Config {
 
     baseUrl = new URL("http://www.itd.umd.edu/pmwiki/pmwiki.php?n=${pmHome}.HomePage")
 
+    followable = [
+      ['^http://www.itd.umd.edu/pmwiki/itdextras/.*'             // incl
+      ]
+    ]
+
     // Read in PmWiki passwords
     def binding = new Binding()
     def shell = new GroovyShell(binding)
@@ -118,6 +123,10 @@ class PmItd extends Config {
    */
 
   public String getTitle (Page page, Node doc, Node body) {
+    if (page.download) {
+      return new File(URLDecoder.decode(page.url.path,'UTF-8')).name
+    }
+
     return (page.query.n?.split('\\.'))[1]
   }
 
@@ -128,6 +137,10 @@ class PmItd extends Config {
    */
 
   public String getUnique (Page page) {
+    if (page.download) {
+      return page.urlNoAnchor.toString()
+    }
+
     return page.query.n
   }
 
@@ -168,6 +181,10 @@ class PmItd extends Config {
           ret = true
         }
       }
+    }
+
+    if (!ret && followable) {
+      ret = isFollowableConf(page, followable)
     }
 
     followUrl[url] = ret
