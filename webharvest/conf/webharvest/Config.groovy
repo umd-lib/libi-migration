@@ -121,8 +121,6 @@ class Config {
     // check the cache
     if (buildUrls.containsKey(orig)) return buildUrls[orig]
 
-    rel = rel.replaceAll(' ','%20')
-
     def url = new URL(baseUrl, rel);
 
     url = buildUrlRedirect(url)
@@ -130,6 +128,9 @@ class Config {
     if (url.path.endsWith('/index.html')) {
       url = new URL(url, './')
     }
+
+    // normalization: encode each part of the path
+    url.path = url.path.split('/').collect { URLEncoder.encode(it) }.join('/')
 
     // cache the result
     buildUrls[orig] = url
