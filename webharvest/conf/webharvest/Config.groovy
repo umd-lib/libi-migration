@@ -620,18 +620,6 @@ class Config {
     // Convert to HtmlCleaner to org.w3c.dom.Document
     def dom = ds.createDOM(doc)
 
-    if (log.isDebugEnabled()) {
-
-      def transformerFactory = TransformerFactory.newInstance()
-      def transformer = transformerFactory.newTransformer()
-      def source = new DOMSource(dom)
-      def sw = new StringWriter()
-      def result =  new StreamResult(sw)
-      transformer.transform(source, result)    
-
-      log.debug("DOM doc:\n${sw}")
-    }
-
     // Convert org.ww3c.dom.Document to org.dom4j.Document
     doc = dr.read(dom)
     
