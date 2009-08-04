@@ -264,7 +264,7 @@ class Config {
     def changed = true
 
     while (changed) {
-      newbody = body.replace('&amp;amp;','&amp;').replace('&amp;apos;','&apos;')
+      newbody = body.replace('&amp;amp;','&amp;').replace('&amp;apos;','&apos;').replace('&amp;quot;','&quot;')
 
       changed = (newbody != body)
 
