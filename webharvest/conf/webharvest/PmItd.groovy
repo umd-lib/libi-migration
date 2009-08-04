@@ -137,11 +137,12 @@ class PmItd extends Config {
    */
 
   public String getUnique (Page page) {
-    if (page.download) {
+
+    if (page.query.n) {
+      return page.query.n
+    } else {
       return page.urlNoAnchor.toString()
     }
-
-    return page.query.n
   }
 
 
