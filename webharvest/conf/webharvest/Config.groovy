@@ -579,6 +579,8 @@ class Config {
     def doc = null
 
     def http = new HTTPBuilder(page.url)
+
+    def done = false
   
     http.request(GET, BINARY) { req ->
       headers.'User-Agent' = 'Libi WebHarvest'
@@ -601,9 +603,12 @@ class Config {
   
       // called only for a 401 (access denied) status code:
       response.'404' = { resp ->  
-        log.warn("Error 404: not found: ${url}")
+        log.warn("Error 404: not found: ${page.url}")
+        done = true
       }
     }
+
+    if (done) return
 
     if (log.isDebugEnabled()) {
       def serializer = new PrettyXmlSerializer(props)
