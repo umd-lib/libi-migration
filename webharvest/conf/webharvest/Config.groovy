@@ -130,7 +130,11 @@ class Config {
     }
 
     // normalization: encode each part of the path
-    url.path = url.path.split('/').collect { URLEncoder.encode(it) }.join('/')
+    url.set(url.protocol, 
+            url.host, 
+            url.port, 
+            url.path.split('/').collect { URLEncoder.encode(URLDecoder.decode(it,'UTF-8')) }.join('/'),
+            url.ref)
 
     // cache the result
     buildUrls[orig] = url
@@ -656,9 +660,15 @@ class Config {
         if (link.url.ref) node.text += '#' + link.url.ref
 
         // check if link should be queued
-        if (!(link in urlDone) && 
-            !(link in urlTodo)) {
-        
+        if (link in urlDone) {
+          log.debug("link already done")
+
+        } else if (link in urlTodo) {
+          log.debug("link already in todo list")
+
+        } else {
+          log.debug("adding link into todo list")
+
           try {
             link.ctype = getContentType(link.url)
             urlTodo << link
