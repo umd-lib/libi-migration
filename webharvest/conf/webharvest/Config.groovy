@@ -529,7 +529,7 @@ class Config {
     def title
 
     // the first h1
-    l = body.selectNodes('//h1');
+    l = body.selectNodes('//h1/font|//h1');
     if (l.size() > 0) {
       title = l[0].text
       l[0].detach()
