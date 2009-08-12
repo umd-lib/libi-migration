@@ -47,6 +47,7 @@ configs = [
   tsd:      new webharvest.TSD(),
   itd:      new webharvest.ITD(),
   irst:     new webharvest.irst(),
+  hum:      new webharvest.hum(),
 ]
 
 parseCommandLine()
