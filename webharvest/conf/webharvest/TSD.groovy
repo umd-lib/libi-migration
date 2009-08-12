@@ -30,6 +30,12 @@ class TSD extends Config {
     followable = [
       '^http://www.lib.umd.edu/TSD.*',             // include
     ]
+
+    // set the depth limit
+    if (!var.depth) {
+      var.depth = 2
+    }
+
   }
 
   /**********************************************************************/
