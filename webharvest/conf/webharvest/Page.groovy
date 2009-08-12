@@ -2,7 +2,7 @@ package webharvest
 
 import javax.persistence.Entity
 import javax.persistence.Id
-
+import javax.persistence.Transient
 
 /**
  * A web location.  Not necessarily text/html.
@@ -27,6 +27,8 @@ import javax.persistence.Id
   public String uniq     // node unique identifier
   public String body     // content body
   public File download   // downloaded file name
+  public int depth       // depth of link, baseUrl is 0
+  @Transient public Page fromPage   // linked from these pages
 
 
   /**********************************************************************
@@ -45,6 +47,8 @@ import javax.persistence.Id
     clone.type    = this.type    
     clone.uniq    = this.uniq    
     clone.download = this.download
+    clone.fromPage = this.fromPage
+    clone.depth    = this.depth
 
     return clone
   }

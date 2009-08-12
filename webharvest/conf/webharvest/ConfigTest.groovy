@@ -22,7 +22,6 @@ class ConfigTest extends Config {
       'abc',
       'xyz',
       ['^http://www.lib.umd.edu/JUNK/ben/webharvest/.*',   // incl
-        ['.*frombellow.*']                                 // excl
       ]
     ]
   }

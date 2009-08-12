@@ -639,7 +639,7 @@ class Config {
 
     // Process each link
     getLinks(body).each { node ->
-      def link = new Page(url:buildUrl(page.url, node.text))
+      def link = new Page(url:buildUrl(page.url, node.text), fromPage:page, depth:page.depth+1)
 
       log.debug("checking link: ${link.url}")
 
@@ -725,7 +725,14 @@ class Config {
    */
 
   public void handlePage(Page page) {
+    // check for depth limit on this page
+    if (var.depth && page.depth > (var.depth as int)) {
+      log.debug("not handling url, depth=${page.depth}: ${page.url}")
+      return
+    }
+
     log.info("handling url: ${page.url}")
+    log.debug("  ctype=${page.ctype}, depth=${page.depth}, from=${page.fromPage?.surl}")
 
     if (page.ctype == 'text/html') {
       urlDone << page
@@ -753,7 +760,7 @@ class Config {
     if (var.baseUrl) {
       baseUrl = new URL(var.baseUrl)
     }
-    urlTodo << new Page(url:baseUrl, ctype:getContentType(baseUrl))
+    urlTodo << new Page(url:baseUrl, ctype:getContentType(baseUrl), depth:0)
 
     // Iterate over the urls to process
     while (! urlTodo.isEmpty()) {
