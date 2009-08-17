@@ -49,6 +49,7 @@ configs = [
   irst:     new webharvest.irst(),
   hum:      new webharvest.hum(),
   lfrf:     new webharvest.lfrf(),
+  tsdpp:    new webharvest.tsdpp(),
 ]
 
 parseCommandLine()
