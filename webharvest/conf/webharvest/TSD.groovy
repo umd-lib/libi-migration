@@ -25,23 +25,14 @@ class TSD extends Config {
       throw new Exception("TSD WWW is not mounted")
     }
 
-    baseUrl = new URL('http://www.lib.umd.edu/TSD/tsd_policies2.html')
+    baseUrl = new URL('http://www.lib.umd.edu/TSD/tsd.html')
 
     followable = [
       ['^http://www.lib.umd.edu/TSD.*',                     // include
-        'http://www.lib.umd.edu/TSD/web_procedure.html',    //   exclude
-        'http://www.lib.umd.edu/TSD/tsd_timesheets.html',   //   exclude
-        'http://www.lib.umd.edu/TSD/forms%26flyers.html',   //   exclude
-        'http://www.lib.umd.edu/TSD/tsd.html',              //   exclude
       ]
     ]
-
-    // set the depth limit
-    if (!var.depth) {
-      var.depth = 2
-    }
-
   }
+
 
   /**********************************************************************/
   /**
