@@ -60,14 +60,14 @@ class TSD extends Config {
    * Get the content-type of one url.
    */
 
-  public String getContentType(URL url) {
+  public String getContentType(Page page) {
 
-    if (url.protocol == 'file') {
+    if (page.url.protocol == 'file') {
       // LAN file
       return 'application/lanfile'
     }
 
-    return super.getContentType(url)
+    return super.getContentType(page)
   }
 
 

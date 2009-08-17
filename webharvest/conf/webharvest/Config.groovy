@@ -439,18 +439,18 @@ class Config {
    * Get the content-type of one url.
    */
 
-  public String getContentType(URL url) {
+  public String getContentType(Page page) {
 
     def ctype = null
 
     // check the cache
-    if (ctypes.containsKey(url)) {
+    if (ctypes.containsKey(page.url)) {
       log.debug('Content-Type cache hit')
-      ctype = ctypes[url]
+      ctype = ctypes[page.url]
 
     } else {
 
-      def http = new HTTPBuilder(url)
+      def http = new HTTPBuilder(page.url)
 
       // make an http HEAD call
       http.request(HEAD) { req ->
@@ -477,15 +477,15 @@ class Config {
           // reader
         }
   
-        // called only for a 401 (access denied) status code:
+        // not round
         response.'404' = { resp ->  
-          log.warn("Error 404: not found: ${url}")
+          log.warn("Error 404: not found: ${page.url} (from=${page.fromPage.url})")
           ctype = 'unknown/notfound'
         }
       }
 
       // add to the cache
-      ctypes[url] = ctype
+      ctypes[page.url] = ctype
     }
 
     log.debug("Content-Type: ${ctype}")
@@ -670,7 +670,7 @@ class Config {
           log.debug("adding link into todo list")
 
           try {
-            link.ctype = getContentType(link.url)
+            link.ctype = getContentType(link)
             urlTodo << link
           }
           catch (Throwable t) {
@@ -770,7 +770,10 @@ class Config {
     if (var.baseUrl) {
       baseUrl = new URL(var.baseUrl)
     }
-    urlTodo << new Page(url:baseUrl, ctype:getContentType(baseUrl), depth:0)
+
+    def basePage = new Page(url:baseUrl, depth:0)
+    basePage.ctype = getContentType(basePage) 
+    urlTodo << basePage
 
     // Iterate over the urls to process
     while (! urlTodo.isEmpty()) {
