@@ -83,6 +83,7 @@ class Config {
 
   def followable = null // tree (include/exclude) of regexes
 
+  def sidebarSelection = "//table//table/tbody/tr/td[h4]|//table//table/tbody/tr/td[//span[@class='leftcol_heading' or @class='leftcol_text']]"  // re for sidebar selection
 
   /**********************************************************************/
   /**
@@ -410,7 +411,7 @@ class Config {
 
   public void extractBodySidebar(Page page, Document doc, Document body) {
 
-    def l = doc.selectNodes("//table//table/tbody/tr/td[h4]|//table//table/tbody/tr/td[//span[@class='leftcol_heading' or @class='leftcol_text']]")
+    def l = doc.selectNodes(sidebarSelection)
     if (l.size() > 0) {
       def div = l[0].clone()
       div.name = 'div'

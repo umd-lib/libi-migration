@@ -14,6 +14,8 @@ class TSD extends Config {
   def tsd = new File('/r/department/Technical Services/TSDWWW/TSDPOLPRO')
 
   def sidebar = []   // list of url to keep sidebar
+  def sidebarSaved = null  // a saved sidebar, not included in the body
+
 
   /**********************************************************************/
   /**
@@ -64,9 +66,19 @@ class TSD extends Config {
 
   public void extractBodySidebar(Page page, Document doc, Document body) {
 
+    sidebarSaved = null
+
     if (page.surl in sidebar) {
       super.extractBodySidebar(page, doc, body);
+
+    } else {
+      def l = doc.selectNodes(sidebarSelection);
+
+      if (l.size() > 0) {
+        sidebarSaved = l[0].clone()
+      }
     }
+
   }
 
 
@@ -116,6 +128,23 @@ class TSD extends Config {
     }
 
     super.handleFile(page)
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Extract all links from the body and non-extracted sidebars.  Determine elsewhere if 
+   * they are followable.
+   */
+
+  public List getLinks(Node body) {
+    def links = super.getLinks(body);
+
+    if (sidebarSaved) {
+      links += super.getLinks(df.createDocument(sidebarSaved))
+    }
+
+    return links
   }
 
 
