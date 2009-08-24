@@ -352,9 +352,17 @@ class Config {
     // first, try to recognize some patterns
     l = doc.selectNodes("//h1|//h2|//span[@class='breadcrumbs']")
     if (l.size() > 0) {
+      def top = l[0].parent
+
       div = body.addElement('div')
 
-      l[0].parent.content().each { e ->
+      // check if we are a <center>
+      if (top.name == 'center') {
+        // move up one level
+        top = top.parent
+      }
+
+      top.content().each { e ->
         def exclude = false
 
         // check for exclusions
@@ -363,7 +371,12 @@ class Config {
         }
 
         if (!exclude) {
-          div.add(e.clone())
+          if (e.name == 'center') {
+            // add the children, not the center
+            e.content().each { div.add(it.clone()) }
+          } else {
+            div.add(e.clone())
+          }
         }
       }
 
