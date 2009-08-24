@@ -749,7 +749,7 @@ class Config {
 
   public void handlePage(Page page) {
     // check for depth limit on this page
-    if (var.depth && page.depth > (var.depth as int)) {
+    if (page.ctype == 'text/html' && var.depth && page.depth > (var.depth as int)) {
       log.debug("not handling url, depth=${page.depth}: ${page.url}")
       return
     }
