@@ -390,13 +390,7 @@ class Config {
     }
 
     // Is there a sidebar we can tack onto the end?
-    l = doc.selectNodes("//table//table/tbody/tr/td[h4]|//table//table/tbody/tr/td[//span[@class='leftcol_heading' or @class='leftcol_text']]")
-    if (l.size() > 0) {
-      div = l[0].clone()
-      div.name = 'div'
-      div.attributes.each { it.detach() }
-      body.rootElement.add(div)
-    }
+    extractBodySidebar(doc, body);
 
     // remove all comments
     l = body.selectNodes("//comment()")
@@ -406,6 +400,23 @@ class Config {
     }
     
     return body
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Is there a sidebar we can tack onto the end?
+   */
+
+  public void extractBodySidebar(Document doc, Document body) {
+
+    def l = doc.selectNodes("//table//table/tbody/tr/td[h4]|//table//table/tbody/tr/td[//span[@class='leftcol_heading' or @class='leftcol_text']]")
+    if (l.size() > 0) {
+      def div = l[0].clone()
+      div.name = 'div'
+      div.attributes.each { it.detach() }
+      body.rootElement.add(div)
+    }
   }
 
 
