@@ -26,6 +26,7 @@ class tsdpp extends TSD {
         'http://www.lib.umd.edu/TSD/tsd_timesheets.html',   //   exclude
         'http://www.lib.umd.edu/TSD/forms%26flyers.html',   //   exclude
         'http://www.lib.umd.edu/TSD/tsd.html',              //   exclude
+        'http://www.lib.umd.edu/TSD/TEST.*',                //   exclude
       ]
     ]
 
