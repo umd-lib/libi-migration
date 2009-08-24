@@ -343,7 +343,7 @@ class Config {
    * the html body element.
    */
 
-  public Document extractBody(Document doc) {
+  public Document extractBody(Page page, Document doc) {
     def body = DocumentHelper.createDocument()
 
     def l 
@@ -390,7 +390,7 @@ class Config {
     }
 
     // Is there a sidebar we can tack onto the end?
-    extractBodySidebar(doc, body);
+    extractBodySidebar(page, doc, body);
 
     // remove all comments
     l = body.selectNodes("//comment()")
@@ -408,7 +408,7 @@ class Config {
    * Is there a sidebar we can tack onto the end?
    */
 
-  public void extractBodySidebar(Document doc, Document body) {
+  public void extractBodySidebar(Page page, Document doc, Document body) {
 
     def l = doc.selectNodes("//table//table/tbody/tr/td[h4]|//table//table/tbody/tr/td[//span[@class='leftcol_heading' or @class='leftcol_text']]")
     if (l.size() > 0) {
@@ -659,7 +659,7 @@ class Config {
     cleanupDoc(doc)
 
     // Extract the content body from the html
-    def body = extractBody(doc)
+    def body = extractBody(page, doc)
 
     if (log.isDebugEnabled()) {
       log.debug("Extracted body\n${body.getRootElement().asXML()}")

@@ -1,7 +1,8 @@
 package webharvest
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.Logger
 
+import org.dom4j.Document
 import org.dom4j.Node
 import org.dom4j.DocumentHelper
 
@@ -12,6 +13,7 @@ class TSD extends Config {
 
   def tsd = new File('/r/department/Technical Services/TSDWWW/TSDPOLPRO')
 
+  def sidebar = []   // list of url to keep sidebar
 
   /**********************************************************************/
   /**
@@ -52,6 +54,19 @@ class TSD extends Config {
     }
 
     return super.buildUrl(baseUrl, rel)
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Is there a sidebar we can tack onto the end?
+   */
+
+  public void extractBodySidebar(Page page, Document doc, Document body) {
+
+    if (page.surl in sidebar) {
+      super.extractBodySidebar(page, doc, body);
+    }
   }
 
 

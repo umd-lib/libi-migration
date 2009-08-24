@@ -106,7 +106,7 @@ class PmItd extends Config {
    * Extract the content body from the html.
    */
 
-  public Document extractBody(Document doc) {
+  public Document extractBody(Page page, Document doc) {
     def body = DocumentHelper.createDocument()
 
     def l = doc.selectNodes("//div[@id='wikitext']");

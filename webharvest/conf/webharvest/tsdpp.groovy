@@ -35,5 +35,7 @@ class tsdpp extends TSD {
       var.depth = 2
     }
 
+    // include the sidebar for these only
+    sidebar = ['http://www.lib.umd.edu/TSD/tsd_policies2.html']
   }
 }
