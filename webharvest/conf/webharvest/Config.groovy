@@ -626,8 +626,21 @@ class Config {
         // resp.statusLine
         // resp.statusLine.statusCode
         // resp.headers.each {println it}
+ 
+        // Get the charset
+        def charset = 'WINDOWS-1252'  // default value
+        if (resp.headers.'Content-Type') {
+          resp.headers.'Content-Type'.split(';').each {
+            if (it.contains('=')) {
+              def (k, v) = it.trim().split('=')
+              if (k == 'charset') {
+                 charset = v
+              }
+            }
+          }
+        }
 
-        doc = cleaner.clean(reader)
+        doc = cleaner.clean(reader, charset)
       }
   
       // called only for a 401 (access denied) status code:
