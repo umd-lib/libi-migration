@@ -525,7 +525,7 @@ class Config {
    */
 
   public String getCreated (Page page, Node doc, Node body) {
-    return '2000-01-01 00:00:00'
+    return (new Date()).format('yyyy-MM-dd HH:mm:ss')
   }
 
 
