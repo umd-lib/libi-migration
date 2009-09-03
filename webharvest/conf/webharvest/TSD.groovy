@@ -35,6 +35,8 @@ class TSD extends Config {
       ['^http://www.lib.umd.edu/TSD.*',                     // include
       ]
     ]
+
+    sidebar = null
   }
 
 
@@ -68,7 +70,7 @@ class TSD extends Config {
 
     sidebarSaved = null
 
-    if (page.surl in sidebar) {
+    if (sidebar == null || page.surl in sidebar) {
       super.extractBodySidebar(page, doc, body);
 
     } else {
