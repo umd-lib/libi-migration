@@ -27,6 +27,8 @@ class tsdpp extends TSD {
         'http://www.lib.umd.edu/TSD/forms%26flyers.html',   //   exclude
         'http://www.lib.umd.edu/TSD/tsd.html',              //   exclude
         'http://www.lib.umd.edu/TSD/TEST.*',                //   exclude
+        'http://www.lib.umd.edu/TSD/checklist_form.html',   //   exclude
+        'http://www.lib.umd.edu/TSD/cpaleph_authorization.html', //exclude
       ]
     ]
 
