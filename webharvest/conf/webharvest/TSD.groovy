@@ -33,6 +33,9 @@ class TSD extends Config {
 
     followable = [
       ['^http://www.lib.umd.edu/TSD.*',                     // include
+        'http://www.lib.umd.edu/TSD/TEST.*',                //   exclude
+        'http://www.lib.umd.edu/TSD/checklist_form.html',   //   exclude
+        'http://www.lib.umd.edu/TSD/cpaleph_authorization.html', //exclude
       ]
     ]
 
