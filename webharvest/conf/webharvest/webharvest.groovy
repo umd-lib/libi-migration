@@ -50,6 +50,7 @@ configs = [
   hum:      new webharvest.hum(),
   lfrf:     new webharvest.lfrf(),
   tsdpp:    new webharvest.tsdpp(),
+  list:     new webharvest.list(),
 ]
 
 parseCommandLine()
