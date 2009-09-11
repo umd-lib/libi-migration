@@ -61,6 +61,7 @@ class Config {
 
   def urlDone = []  // pages already processed
   def urlTodo = []  // pages waiting to be processed
+  def urlSaved = [] // pages saved for output
 
   def cookies = [:]     // cookies need for authentication
   def authHeaders = [:] // other headers needed for authentication
@@ -669,6 +670,13 @@ class Config {
       log.debug("dom4j doc:\n${doc.getRootElement().asXML()}")
     }
 
+    // Check for the Multiple Choices page
+    def title = doc.selectSingleNode('/html/head/title')
+    if (title?.text == '300 Multiple Choices') {
+      log.warn("Error: multiple choices: ${page.surl} (from=${page.fromPage})")
+      return
+    }
+
     // Cleanup the doc
     cleanupDoc(doc)
 
@@ -830,7 +838,7 @@ class Config {
     // Build the node tree
     log.info('Building node tree')
 
-    def tree = buildTree(urlDone)
+    def tree = buildTree(urlSaved)
 
     // Output nodes
     log.info('Writing out nodes')
@@ -987,6 +995,8 @@ class Config {
     log.debug("Adding ${clone} to hibernate object store")
 
     hb.save(clone)
+
+    urlSaved << page
   }
 
 
