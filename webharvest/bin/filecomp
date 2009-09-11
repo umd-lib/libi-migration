@@ -1,0 +1,106 @@
+#!/usr/bin/env groovy
+
+// This program can be generalized but currently is tailored
+// specifically for TSD
+
+import org.apache.commons.cli.*
+
+import org.dom4j.*
+import org.dom4j.io.*
+
+@Grab(group = 'dom4j', module = 'dom4j', version = '1.6.1')  
+@Grab(group = 'jaxen', module = 'jaxen', version = '1.1.1')  
+
+def main() {
+
+  parseCommandLine()
+
+  try {
+    nodesf = new File(workdir, 'nodes.xml')
+    fsdir = new File(workdir, 'fs')
+
+    // read nodes
+    nodefiles = []
+
+    reader = new SAXReader()
+    nodes = reader.read(nodesf)
+
+    nodes.selectNodes('//node/@unique').each { u -> 
+      m = u.text =~ /^http:\/\/www.lib.umd.edu\/TSD\/(.*)$/
+      if (m) {
+        e = m[0][1]
+        efile = new File(fsdir, URLDecoder.decode(e, 'UTF-8'))
+        nodefiles << efile
+      }
+    }
+    
+    // read files
+    fsdir.eachFileRecurse { file ->
+      if (! file.isDirectory()) {
+        if (! (file in nodefiles)) {
+          println file
+        }
+      }
+    }
+
+  }
+  catch (Throwable t) {
+    t.printStackTrace()
+    System.exit(1)
+  }
+  System.exit(0)
+}
+
+main()
+
+
+/**********************************************************************/
+/*
+ * Parse the command line.
+ */
+
+def parseCommandLine() {
+  // Setup the options
+  options = new Options()
+  
+  option = new Option("w", "workdir", true, "work directory; with nodes.xml and fs")
+  option.setRequired(false)
+  option.setType(File)
+  options.addOption(option)
+
+  // Parse the command line
+  parser = new PosixParser()
+  cmd = parser.parse(options, args)
+
+  // workdir
+  if (cmd.hasOption('w')) {
+    workdir = cmd.getOptionObject('w')
+  } else {
+    workdir = new File("work/tsd")
+  }
+
+  if (! workdir.exists()) {
+    printUsage(options, "${workdir} does not exist")
+  }
+  if (! workdir.isDirectory()) {
+    printUsage(options, "${workdir} is not a directory")
+  }
+}
+
+
+/**********************************************************************/
+/*
+ * Print program usage.
+ */
+
+def printUsage(Options options, Object[] args) {
+  // print messages
+  args.each {println it}
+  if (args.size() != 0) { println '' }
+
+  formatter = new HelpFormatter()
+  formatter.printHelp("filecomp -w <workdir>", options)
+
+  System.exit(1)
+}
+
