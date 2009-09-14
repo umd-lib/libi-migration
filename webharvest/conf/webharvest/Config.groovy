@@ -1,5 +1,7 @@
 package webharvest
 
+import java.text.DateFormat
+
 import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
@@ -526,6 +528,20 @@ class Config {
    */
 
   public String getCreated (Page page, Node doc, Node body) {
+
+    def static pattern = ~/last *(modified|revised): *(\w+ \d{1,2}, \d{4})/
+
+    for (n in doc.selectNodes("//*").reverse()) {
+      def m = pattern.matcher(n.text.toLowerCase())
+      if (m) {
+        try {
+          Date d = DateFormat.getDateInstance().parse(m[0][2])
+          return d.format('yyyy-MM-dd HH:mm:ss')
+        }
+        catch (Exception e) {}
+      }
+    }
+
     return (new Date()).format('yyyy-MM-dd HH:mm:ss')
   }
 
