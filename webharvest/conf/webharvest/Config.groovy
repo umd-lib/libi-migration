@@ -88,6 +88,11 @@ class Config {
 
   def sidebarSelection = "//table//table/tbody/tr/td[h4]|//table//table/tbody/tr/td[//span[@class='leftcol_heading' or @class='leftcol_text']]"  // re for sidebar selection
 
+  def badlinks = [:]  // report bad links
+
+  def outbadlinks = null  // bad links report file
+
+
   /**********************************************************************/
   /**
    * Constructor.
@@ -106,6 +111,20 @@ class Config {
    */
 
   public void authenticate() {}
+
+
+  /**********************************************************************/
+  /**
+   * Add a bad link to the report.
+   */
+
+  public void addBadLink(String from, String to) {
+    if (! badlinks[from]) {
+      badlinks[from] = []
+    }
+
+    badlinks[from] << to
+  }
 
 
   /**********************************************************************/
@@ -508,6 +527,7 @@ class Config {
         // not round
         response.'404' = { resp ->  
           log.warn("Error 404: not found: ${page.url} (from=${page.fromPage.url})")
+          addBadLink(page.fromPage.surl, page.surl)
           ctype = 'unknown/notfound'
         }
       }
@@ -529,13 +549,14 @@ class Config {
 
   public String getCreated (Page page, Node doc, Node body) {
 
-    def static pattern = ~/last *(modified|revised): *(\w+ \d{1,2}, \d{4})/
+    def static pattern = ~/last *(modified|revised): *(\w+\.? +\d{1,2}, +\d{4})/
 
     for (n in doc.selectNodes("//*").reverse()) {
       def m = pattern.matcher(n.text.toLowerCase())
       if (m) {
         try {
-          Date d = DateFormat.getDateInstance().parse(m[0][2])
+          def date = m[0][2].replaceAll('\\.','')
+          Date d = DateFormat.getDateInstance().parse(date)
           return d.format('yyyy-MM-dd HH:mm:ss')
         }
         catch (Exception e) {}
@@ -663,6 +684,7 @@ class Config {
       // called only for a 401 (access denied) status code:
       response.'404' = { resp ->  
         log.warn("Error 404: not found: ${page.url}")
+        addBadLink(page.fromPage.surl, page.surl)
         done = true
       }
     }
@@ -690,6 +712,7 @@ class Config {
     def title = doc.selectSingleNode('/html/head/title')
     if (title?.text == '300 Multiple Choices') {
       log.warn("Error: multiple choices: ${page.surl} (from=${page.fromPage})")
+      addBadLink(page.fromPage.surl, page.surl)
       return
     }
 
@@ -859,6 +882,16 @@ class Config {
     // Output nodes
     log.info('Writing out nodes')
     outputNodes(tree)
+
+    // Bad link report
+    badlinks.each { k,v ->
+      outbadlinks.println(k)
+      v.each {
+        outbadlinks.println(" -> ${it}")
+      }
+      outbadlinks.println()
+    }
+    outbadlinks.close()
   }
 
 

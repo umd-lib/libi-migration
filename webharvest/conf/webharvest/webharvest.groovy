@@ -90,6 +90,7 @@ try {
   conf.out = new groovy.xml.MarkupBuilder(outfilew) 
   conf.hb = hb
   conf.downloaddir = downloaddir
+  conf.outbadlinks = new FileWriter(new File(workdir, 'badlinks.txt'))
 
   // add command-line vars
   vars.each {
