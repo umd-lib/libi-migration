@@ -549,13 +549,13 @@ class Config {
 
   public String getCreated (Page page, Node doc, Node body) {
 
-    def static pattern = ~/last *(modified|revised): *(\w+\.? +\d{1,2}, +\d{4})/
+    def static pattern = ~/last *(modified|revised): *(\w+ +\d{1,2}, +\d{4})/
 
     for (n in doc.selectNodes("//*").reverse()) {
       def m = pattern.matcher(n.text.toLowerCase())
       if (m) {
         try {
-          def date = m[0][2].replaceAll('\\.','')
+          def date = m[0][2]
           Date d = DateFormat.getDateInstance().parse(date)
           return d.format('yyyy-MM-dd HH:mm:ss')
         }
