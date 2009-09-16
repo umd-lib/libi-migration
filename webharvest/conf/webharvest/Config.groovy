@@ -422,6 +422,21 @@ class Config {
       e.detach()
     }
     
+    // change all table bgcolor attributes to style
+    body.selectNodes("//table//@bgcolor").each { a ->
+      def n = a.parent
+
+      // remove bgcolor attribute
+      n.remove(a)
+
+      // set style attribute
+      def style = n.attribute('style')?.text ?: ''
+      if (style) style += '; '
+      style += "background-color: ${a.text}"
+
+      n.addAttribute('style', style)
+    }
+
     return body
   }
 
