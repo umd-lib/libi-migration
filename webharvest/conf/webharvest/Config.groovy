@@ -86,7 +86,7 @@ class Config {
 
   def followable = null // tree (include/exclude) of regexes
 
-  def sidebarSelection = "//table//table/tbody/tr/td[h4]|//table//table/tbody/tr/td[//span[@class='leftcol_heading' or @class='leftcol_text']]"  // re for sidebar selection
+  def sidebarSelection = "//table//table/tbody/tr/td[h4]|//table//table/tbody/tr/td[//*[@class='leftcol_heading' or @class='leftcol_text']]"  // re for sidebar selection
 
   def badlinks = [:]  // report bad links
 
