@@ -156,7 +156,7 @@ class Config {
     url.set(url.protocol, 
             url.host, 
             url.port, 
-            url.path.split('/').collect { URLEncoder.encode(URLDecoder.decode(it,'UTF-8')) }.join('/'),
+            url.path.split('/').collect { URLEncoder.encode(URLDecoder.decode(it,'UTF-8')) }.join('/') + (url.path.endsWith('/') ? '/' : ''),
             url.ref)
 
     // cache the result
