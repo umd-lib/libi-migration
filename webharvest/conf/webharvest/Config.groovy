@@ -922,6 +922,15 @@ class Config {
       return isFollowableConf(page, followable)
     }
 
+    if (baseUrl.toString().endsWith('/')) {
+      // harvesting a directory, include all files, subdirs
+      def s = baseUrl.toString()
+      s = s.substring(0, s.length()-1)
+      followable = ["^${s}.*"]
+
+      return isFollowableConf(page, followable)
+    }
+
     return page.surl.startsWith(baseUrl.toString())
   }
 
