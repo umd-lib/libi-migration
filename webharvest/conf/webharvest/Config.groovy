@@ -373,7 +373,7 @@ class Config {
     def div
 
     // first, try to recognize some patterns
-    l = doc.selectNodes("//h1|//h2|//span[@class='breadcrumbs']")
+    l = doc.selectNodes("/html/body/center[//h1]|//h1|//h2|//span[@class='breadcrumbs']")
     if (l.size() > 0) {
       def top = l[0].parent
 
