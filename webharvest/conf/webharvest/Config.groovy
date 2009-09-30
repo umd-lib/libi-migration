@@ -392,7 +392,11 @@ class Config {
     }
 
     // the paths were the same until one ran out first
-    assert xp.size() != 0 || yp.size() != 0
+    if (! (xp.size() != 0 || yp.size() != 0)) {
+      log.error("x=${x}")
+      log.error("y=${y}")
+      throw new Exception("Error in compare()")
+    }
 
     if (xp.size() == 0) {
       // x is parent of y
