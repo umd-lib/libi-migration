@@ -230,6 +230,9 @@ class Config {
 
   public List buildTree(List done) {
     def tree = ['nodes']
+    
+    // Add missing folders
+    buildTreeAddDirs(done)
 
     // Insert each Page into proper place
     done.each { buildTree(tree, it); log.debug("Tree: ${tree}") }
@@ -277,6 +280,48 @@ class Config {
 
     if (!done) { 
       tree << page 
+    }
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Add missing directory nodes.
+   */
+
+  public void buildTreeAddDirs(List done) {
+    done.clone().each { buildTreeAddDirs(done, it, '.') }
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Add missing directory nodes.
+   */
+
+  public void buildTreeAddDirs(List done, Page n, String rel) {
+    if (n.download) return
+
+    def pu = new URL(n.url, rel)
+    if (pu.path in ['..','/'] || pu == n.url) return
+
+    def p = new Page(url:pu, ctype:'text/html')
+    if (! (p in done) && isFollowable(p)) {
+      log.info("  add missing directory: ${p}")
+
+      // Add the new Page
+      p.title = pu.path.split('/')[-1]
+
+      def doc = DocumentHelper.createDocument()
+      doc.addElement('html').addElement('body')
+
+      def body = DocumentHelper.createDocument()
+      body.addElement('body')
+
+      savePage(p, doc, body)
+
+      // Try the next directory up
+      buildTreeAddDirs(done, p, '..')
     }
   }
 
@@ -599,6 +644,10 @@ class Config {
 
   public String getTitle (Page page, Node doc, Node body) {
 
+    if (page.title) {
+      return page.title
+    }
+
     if (page.download) {
       return new File(URLDecoder.decode(page.url.path,'UTF-8')).name
     }
@@ -837,12 +886,12 @@ class Config {
   public void handlePage(Page page) {
     // check for depth limit on this page
     if (page.ctype == 'text/html' && var.depth && page.depth > (var.depth as int)) {
-      log.debug("not handling url, depth=${page.depth}: ${page.url}")
+      log.debug("  not handling url, depth=${page.depth}: ${page.url}")
       return
     }
 
-    log.info("handling url: ${page.url}")
-    log.debug("  ctype=${page.ctype}, depth=${page.depth}, from=${page.fromPage?.surl}")
+    log.info("  handling url: ${page.url}")
+    log.debug("   ctype=${page.ctype}, depth=${page.depth}, from=${page.fromPage?.surl}")
 
     if (page.ctype == 'text/html') {
       urlDone << page
