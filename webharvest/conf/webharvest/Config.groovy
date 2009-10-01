@@ -234,6 +234,9 @@ class Config {
     // Add missing folders
     buildTreeAddDirs(done)
 
+    // Sort by url, leave the first entry in place
+    done = done[0..0] + done.tail().sort() { it.surl }
+
     // Insert each Page into proper place
     done.each { buildTree(tree, it); log.debug("Tree: ${tree}") }
 
