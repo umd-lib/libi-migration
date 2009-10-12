@@ -232,7 +232,9 @@ class Config {
     def tree = ['nodes']
     
     // Add missing folders
-    buildTreeAddDirs(done)
+    if (var.adddirs) {
+      buildTreeAddDirs(done)
+    }
 
     // Sort by url, leave the first entry in place
     done = done[0..0] + done.tail().sort() { it.surl }
