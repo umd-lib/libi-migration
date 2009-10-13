@@ -51,6 +51,7 @@ configs = [
   lfrf:     new webharvest.lfrf(),
   tsdpp:    new webharvest.tsdpp(),
   list:     new webharvest.list(),
+  acq:      new webharvest.acq(),
 ]
 
 parseCommandLine()
