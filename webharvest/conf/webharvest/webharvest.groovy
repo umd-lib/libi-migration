@@ -54,6 +54,7 @@ configs = [
   acq:      new webharvest.acq(),
   mddaypics: new webharvest.mddaypics(),
   acdm:     new webharvest.acdm(),
+  cmt:      new webharvest.cmt(),
 ]
 
 parseCommandLine()
