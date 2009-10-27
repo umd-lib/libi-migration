@@ -42,4 +42,18 @@ class cmt extends Config {
 
     return super.buildUrlRedirect(url)
   }
+
+
+  /**********************************************************************/
+  /**
+   * Get title of the doc.
+   */
+
+  public String getTitle (Page page, Node doc, Node body) {
+    if (page.surl == 'http://www.lib.umd.edu/CLMD/CMT/coretasks.html') {
+      return 'Core Tasks for Collection Managers'
+    } else {
+      return super.getTitle(page, doc, body)
+    }
+  }
 }
