@@ -157,7 +157,7 @@ class Config {
             url.host, 
             url.port, 
             url.path.replaceAll('//','/').split('/').collect { URLEncoder.encode(URLDecoder.decode(it,'UTF-8')) }.join('/') + (url.path.endsWith('/') ? '/' : ''),
-            url.ref)
+            url.ref?.replaceAll(' ','+'))
 
     // cache the result
     buildUrls[orig] = url
