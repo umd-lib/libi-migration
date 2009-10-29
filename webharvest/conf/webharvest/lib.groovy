@@ -46,6 +46,12 @@ class lib extends Config {
         '^http://www.lib.umd.edu/twiki/.*',        // exclude
       ]
     ]
+
+    // set nofiles option
+    if (!var.nofiles) {
+      var.nofiles = 'true'
+    }
+
   }
 
 

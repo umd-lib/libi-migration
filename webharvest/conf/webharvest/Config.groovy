@@ -862,24 +862,26 @@ class Config {
 
     def http = new HTTPBuilder(page.url)
   
-    http.request(GET, BINARY) { req ->
-      headers.'User-Agent' = 'Libi WebHarvest'
+    if (!var.nofiles || var.nofiles != 'true') {
+      http.request(GET, BINARY) { req ->
+        headers.'User-Agent' = 'Libi WebHarvest'
  
-      // authentication cookies
-      if (! cookies.isEmpty()) {
-        headers.Cookie = cookies.collect{"${it.key}=${it.value}"}.join('; ')
-      }
+        // authentication cookies
+        if (! cookies.isEmpty()) {
+          headers.Cookie = cookies.collect{"${it.key}=${it.value}"}.join('; ')
+        }
 
-      response.success = { resp, reader ->
+        response.success = { resp, reader ->
 
-        log.debug("Downloading to ${page.download}")
-
-        page.download << reader
-      }
+          log.debug("Downloading to ${page.download}")
+          
+          page.download << reader
+        }
   
-      // called only for a 401 (access denied) status code:
-      response.'404' = { resp ->  
-        log.warn("Error 404: not found: ${url}")
+        // called only for a 401 (access denied) status code:
+        response.'404' = { resp ->  
+          log.warn("Error 404: not found: ${url}")
+        }
       }
     }
 
