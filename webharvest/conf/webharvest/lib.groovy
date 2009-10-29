@@ -28,6 +28,22 @@ class lib extends Config {
 
     followable = [
       ['^http://www.lib.umd.edu/.*',             // include
+        '^http://www.lib.umd.edu/JUNK/.*',         // exclude
+        '^http://www.lib.umd.edu/LAB/DB/.*',       // exclude
+        '^http://www.lib.umd.edu/LAB/IMG/.*',      // exclude
+        '^http://www.lib.umd.edu/LAB/JERRYLEE/.*', // exclude
+        '^http://www.lib.umd.edu/archivesum/.*',   // exclude
+        '^http://www.lib.umd.edu/blogs/.*',        // exclude
+        '^http://www.lib.umd.edu/cgi-bin/.*',      // exclude
+        '^http://www.lib.umd.edu/dcr/civilwar/.*', // exclude
+        '^http://www.lib.umd.edu/dcr/collections/sterling/.*', // exclude
+        '^http://www.lib.umd.edu/digital/.*',      // exclude
+        '^http://www.lib.umd.edu/drum/.*',         // exclude
+        '^http://www.lib.umd.edu/eres/.*',         // exclude
+        '^http://www.lib.umd.edu/itd/web/.*',      // exclude
+        '^http://www.lib.umd.edu/sapps/.*',        // exclude
+        '^http://www.lib.umd.edu/stats/.*',        // exclude
+        '^http://www.lib.umd.edu/twiki/.*',        // exclude
       ]
     ]
   }
