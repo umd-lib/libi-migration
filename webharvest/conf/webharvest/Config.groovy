@@ -367,7 +367,7 @@ class Config {
       // This is a stub for future work
       //log.debug("text: ${node.text}")
     } else {
-      node.nodeIterator().each { cleanupDoc(it) }
+      //node.nodeIterator().each { cleanupDoc(it) }
     }
   }
 
