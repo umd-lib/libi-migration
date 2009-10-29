@@ -28,7 +28,7 @@ class lib extends Config {
 
     followable = [
       ['^http://www.lib.umd.edu/.*',             // include
-        '^http://www.lib.umd.edu/JUNK/.*',         // exclude
+        '.*/JUNK/.*',                              // exclude
         '^http://www.lib.umd.edu/LAB/DB/.*',       // exclude
         '^http://www.lib.umd.edu/LAB/IMG/.*',      // exclude
         '^http://www.lib.umd.edu/LAB/JERRYLEE/.*', // exclude
