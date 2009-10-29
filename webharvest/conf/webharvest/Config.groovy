@@ -801,41 +801,47 @@ class Config {
 
     // Process each link
     getLinks(body).each { node ->
-      def link = new Page(url:buildUrl(page.url, node.text), fromPage:page, depth:page.depth+1)
+      try {
+        def link = new Page(url:buildUrl(page.url, node.text), fromPage:page, depth:page.depth+1)
 
-      log.debug("checking link: ${link.url}")
+        log.debug("checking link: ${link.url}")
 
-      def follow = isFollowable(link)
-      log.debug("isFollowable: ${follow}")
+        def follow = isFollowable(link)
+        log.debug("isFollowable: ${follow}")
 
-      if (!follow) {
-        // turn the link into an absolute url
-        node.text = link.url.toString()
-
-      } else {
-        // change the link to internal
-        node.text = '[[' + getUnique(link) + ']]'
-        if (link.url.ref) node.text += '#' + link.url.ref
-
-        // check if link should be queued
-        if (link in urlDone) {
-          log.debug("link already done")
-
-        } else if (link in urlTodo) {
-          log.debug("link already in todo list")
+        if (!follow) {
+          // turn the link into an absolute url
+          node.text = link.url.toString()
 
         } else {
-          log.debug("adding link into todo list")
+          // change the link to internal
+          node.text = '[[' + getUnique(link) + ']]'
+          if (link.url.ref) node.text += '#' + link.url.ref
 
-          try {
-            link.ctype = getContentType(link)
-            urlTodo << link
+          // check if link should be queued
+          if (link in urlDone) {
+            log.debug("link already done")
+            
+          } else if (link in urlTodo) {
+            log.debug("link already in todo list")
+
+          } else {
+            log.debug("adding link into todo list")
+
+            try {
+              link.ctype = getContentType(link)
+              urlTodo << link
+            }
+            catch (Throwable t) {
+              log.error("Error getting Content-Type for link ${link.url}\n" +
+                        ErrorHandling.getStackTrace(t))
+            }            
           }
-          catch (Throwable t) {
-            log.error("Error getting Content-Type for link ${link.url}\n" +
-                      ErrorHandling.getStackTrace(t))
-          }            
         }
+      }
+      catch (Exception e) {
+        log.error("Error handling link ${node.text}")
+        addBadLink(page.surl, node.text)
       }
     }
 
