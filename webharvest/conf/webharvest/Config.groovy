@@ -396,11 +396,13 @@ class Config {
       yp.remove(0)
     }
 
-    // the paths were the same until one ran out first
+    // the paths were the same until at least one of them ran out
+
     if (! (xp.size() != 0 || yp.size() != 0)) {
+      // the paths are identical
       log.error("x=${x}")
       log.error("y=${y}")
-      throw new Exception("Error in compare()")
+      return 0
     }
 
     if (xp.size() == 0) {
