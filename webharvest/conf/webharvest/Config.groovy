@@ -144,6 +144,17 @@ class Config {
     // check the cache
     if (buildUrls.containsKey(orig)) return buildUrls[orig]
 
+    // fixups
+    if (var.urlFixups) {
+      def preFixup = rel
+      var.urlFixups.each { regex, replacement ->
+        rel = rel.replaceAll(regex, replacement)
+      }
+      if (preFixup != rel) {
+        log.debug("Url fixup ${preFixup} -> ${rel}")
+      }
+    }
+
     def url = new URL(baseUrl, rel);
 
     url = buildUrlRedirect(url)
