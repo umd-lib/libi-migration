@@ -22,7 +22,9 @@ class cpct extends Config {
 
     followable = [
       ['^http://www.lib.umd.edu/TSD/cpct.*',                     // include
-      ]
+      ],
+      ['^http://www.lib.umd.edu/TSD/ACT.*',                      // include
+      ],
     ]
   }
 }
