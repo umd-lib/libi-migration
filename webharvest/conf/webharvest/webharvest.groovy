@@ -58,6 +58,8 @@ configs = [
   lib:      new webharvest.lib(),
   nevpc:    new webharvest.nevpc(),
   cpct:     new webharvest.cpct(),
+  oc:       new webharvest.oc(),
+  pres:     new webharvest.pres(),
 ]
 
 parseCommandLine()
