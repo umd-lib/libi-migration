@@ -29,16 +29,36 @@ class TSD extends Config {
       throw new Exception("TSD WWW is not mounted")
     }
 
-    baseUrl = new URL('http://www.lib.umd.edu/TSD/tsd.html')
+    baseUrl = new URL('http://www.lib.umd.edu/TSD/tsdx.html')
 
     followable = [
       ['^http://www.lib.umd.edu/TSD/.+',                    // include
         'http://www.lib.umd.edu/TSD/TEST.*',                //   exclude
         'http://www.lib.umd.edu/TSD/checklist_form.html',   //   exclude
         'http://www.lib.umd.edu/TSD/cpaleph_authorization.html', //exclude
+        'http://www.lib.umd.edu/TSD/web_procedure.html',    //   exclude
+        'http://www.lib.umd.edu/TSD/tsd_timesheets.html',   //   exclude
+        'http://www.lib.umd.edu/TSD/helpdesk.html',                  //   exclude
+        'http://www.lib.umd.edu/TSD/tsd.html',                       //   exclude
+        'http://www.lib.umd.edu/TSD/PRES/disasterplan.html',         //   exclude
+        'http://www.lib.umd.edu/TSD/PRES/Microfilm.html',            //   exclude
+        'http://www.lib.umd.edu/TSD/ACQ/acqhomepage.html',           //   exclude
+        'http://www.lib.umd.edu/TSD/CATDEPT/OCPGHome.html',          //   exclude
+        'http://www.lib.umd.edu/TSD/ACDM/ACDM.html',                 //   exclude
+        'http://www.lib.umd.edu/TSD/PRES/1Preshp.html',              //   exclude
+        'http://www.lib.umd.edu/TSD/tsd_comm.html',                  //   exclude
+        'http://www.lib.umd.edu/TSD/workingpaper6_ptA.html',         //   exclude
+        'http://www.lib.umd.edu/TSD/tsd_orgchart.html',              //   exclude
+        'http://www.lib.umd.edu/TSD/IMG/search_tsd_7.gif',           //   exclude
       ]
     ]
 
+    // set the depth limit
+    if (! var.depth) {
+      var.depth = 2
+    }
+
+    // retain all sidebars
     sidebar = null
   }
 
