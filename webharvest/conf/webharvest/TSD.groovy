@@ -50,6 +50,11 @@ class TSD extends Config {
         'http://www.lib.umd.edu/TSD/workingpaper6_ptA.html',         //   exclude
         'http://www.lib.umd.edu/TSD/tsd_orgchart.html',              //   exclude
         'http://www.lib.umd.edu/TSD/IMG/search_tsd_7.gif',           //   exclude
+        'http://www.lib.umd.edu/TSD/CATDEPT/OCPG_Staff.html',        //   exclude
+        'http://www.lib.umd.edu/TSD/CATDEPT/OrCD_OrgChart_Nov2009.png',   //exclude
+        'http://www.lib.umd.edu/TSD/CATDEPT/projectscatalogingteam.html', //exclude
+        'http://www.lib.umd.edu/TSD/CATDEPT/schalowjmt.html',             //exclude
+        'http://www.lib.umd.edu/TSD/CR_contact_list.doc',                 //exclude
       ]
     ]
 
