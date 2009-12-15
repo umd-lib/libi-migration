@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import commands
 from xml.dom.minidom import Document
 from datetime import datetime
@@ -11,6 +12,8 @@ class Processor:
     prefix = ''
     nodes = {}
 
+    exclusions = ['WebPreferences.txt','WebTopicList.txt','WebStatistics.txt','WebSearch.txt','WebSearchAdvanced.txt','WebRss.txt','WebNotify.txt','WebLeftBar.txt','WebIndex.txt','WebChanges.txt','WebAtom.txt','WebTopicCreator.txt']
+    
     def __init__(self, prefix):
         self.prefix = prefix
 
@@ -20,10 +23,11 @@ class Processor:
             self.printNode(self.nodes[i], spaces + " ")
 
     def processChildren(self, silent):
+        print >> sys.stderr, "Processing children..."
         rootNode = node.Node(self.prefix, "", "", "")
         rootNode.unique = self.prefix
         for name, curNode in self.nodes.iteritems():
-            if curNode.parent != '':
+            if curNode.parent != '' and curNode.parent in self.nodes:
                 self.nodes[curNode.parent].children.append(name)
             else:
                 rootNode.children.append(name)
@@ -42,6 +46,7 @@ class Processor:
             curNode.date = datetime.fromtimestamp(int(re.compile('.*date=\"([^\"]*)\".*').match(line).group(1))).strftime("%Y-%m-%d %H:%S:%M")
 
     def process(self, path, name, attachment_path, attachments_path):
+        print >> sys.stderr, "processing " + path
         buffer = open(path)
         content = ""
         curNode = node.Node(name, content, "", attachments_path)
@@ -82,7 +87,7 @@ class Processor:
         list = os.listdir(directory)
         list.sort()
         for f in list:
-            if f.startswith('Web') and f != 'WebHome.txt':
+            if f in self.exclusions:
                 continue
             if os.path.isfile(os.path.join(directory, f)) and f.endswith('txt'):
                 attachment_path = ""
