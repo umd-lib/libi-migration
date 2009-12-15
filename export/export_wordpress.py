@@ -36,9 +36,10 @@ content = 'news'
 silent = False
 prefix = 'wordpress'
 attachments_path = ''
+version = '2.0'
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], 'u:t:x:r:f:pc:t:sa:', ['username','table=','root=','prefix=','passfile=','content=','password', 'silent', 'attachments='])
+    opts, args = getopt.getopt(sys.argv[1:], 'u:t:x:r:f:pc:t:sa:v:', ['username','table=','root=','prefix=','passfile=','content=','password', 'silent', 'attachments=', 'version='])
 except getopt.GetoptError:
     print "Command line options\n" + \
         "\t-u: username\n" + \
@@ -49,6 +50,7 @@ except getopt.GetoptError:
         "\t-r: root node (e.g., DTIS)\n" + \
         "\t-c: content type (e.g., \"news\" or)\n" + \
         "\t-a: path for the attachments folder\n" + \
+        "\t-v: wordpress version; default is 2.0\n" + \
         "\t-s: silent (no output)\n"
     sys.exit(2)
 
@@ -72,6 +74,8 @@ for opt, arg in opts:
         silent = True
     if opt in ('-a','--attachments'):
         attachments_path = arg + '/'
+    if opt in ('-v','--version'):
+        version = arg
 
 db = MySQLdb.connect(host="localhost", user=username, passwd=password, db="wordpress")
 
