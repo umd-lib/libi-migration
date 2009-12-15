@@ -35,9 +35,10 @@ rootName = 'DTIS'
 content = 'news'
 silent = False
 prefix = 'wordpress'
+attachments_path = ''
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], 'u:t:x:r:f:pc:t:s', ['username','table=','root=','prefix=','passfile=','content=','password', 'silent'])
+    opts, args = getopt.getopt(sys.argv[1:], 'u:t:x:r:f:pc:t:s', ['username','table=','root=','prefix=','passfile=','content=','password', 'silent', 'attachments='])
 except getopt.GetoptError:
     print "Command line options\n" + \
         "\t-u: username\n" + \
@@ -47,6 +48,7 @@ except getopt.GetoptError:
         "\t-t: table prefix (e.g., webservices)\n" + \
         "\t-r: root node (e.g., DTIS)\n" + \
         "\t-c: content type (e.g., \"news\" or)\n" + \
+        "\t-a: path for the attachments folder\n" + \
         "\t-s: silent (no output)\n"
     sys.exit(2)
 
@@ -68,6 +70,8 @@ for opt, arg in opts:
         rootName = arg
     if opt in ('-s','--silent'):
         silent = True
+    if opt in ('-a','--attachments'):
+        attachments_path = arg + '/'
 
 db = MySQLdb.connect(host="localhost", user=username, passwd=password, db="wordpress")
 
@@ -76,7 +80,7 @@ cursor = db.cursor(MySQLdb.cursors.DictCursor)
 cursor.execute("SELECT user_login, post_content, post_title, post_date, guid, " + table + "_posts.ID, post_mime_type  FROM " + table + "_posts JOIN " + table + "_users ON " + table + "_users.ID = post_author WHERE post_status != 'draft' AND post_title != ''")
 
 nodes = {}
-rootNode = node.Node(rootName, "", "")
+rootNode = node.Node(rootName, "", "", attachments_path)
 nodes[rootNode.name] = rootNode
 for x in range(0,cursor.rowcount):  
     row = cursor.fetchone()
@@ -90,7 +94,7 @@ for x in range(0,cursor.rowcount):
             nodeType = 'attachment'
             uniquePrefix = 'attachment-'
             url = row['guid']
-    newNode = node.Node(row['post_title'], format_content(row['post_content']), rootName)
+    newNode = node.Node(row['post_title'], format_content(row['post_content']), rootName, attachments_path)
     newNode.author = str(row['user_login'])
     newNode.date = str(row['post_date'])
     newNode.url = row['guid']
