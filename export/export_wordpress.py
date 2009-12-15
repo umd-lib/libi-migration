@@ -38,7 +38,7 @@ prefix = 'wordpress'
 attachments_path = ''
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], 'u:t:x:r:f:pc:t:s', ['username','table=','root=','prefix=','passfile=','content=','password', 'silent', 'attachments='])
+    opts, args = getopt.getopt(sys.argv[1:], 'u:t:x:r:f:pc:t:sa:', ['username','table=','root=','prefix=','passfile=','content=','password', 'silent', 'attachments='])
 except getopt.GetoptError:
     print "Command line options\n" + \
         "\t-u: username\n" + \
