@@ -81,7 +81,7 @@ db = MySQLdb.connect(host="localhost", user=username, passwd=password, db="wordp
 
 
 cursor = db.cursor(MySQLdb.cursors.DictCursor)
-cursor.execute("SELECT user_login, post_content, post_title, post_date, guid, " + table + "_posts.ID, post_mime_type  FROM " + table + "_posts JOIN " + table + "_users ON " + table + "_users.ID = post_author WHERE post_status != 'draft' AND post_title != ''")
+cursor.execute("SELECT user_login, post_content, post_title, post_date, guid, " + table + "_posts.ID, post_mime_type  FROM " + table + "_posts JOIN " + table + "_users ON " + table + "_users.ID = post_author WHERE post_status != 'draft' AND post_title != '' AND post_type in ('post','attachment')")
 
 nodes = {}
 rootNode = node.Node(rootName, "", "", attachments_path)
@@ -102,7 +102,7 @@ for x in range(0,cursor.rowcount):
     newNode.author = str(row['user_login'])
     newNode.date = str(row['post_date'])
     newNode.url = row['guid']
-    newNode.unique = uniquePrefix + prefix + '-' + row['post_title']
+    newNode.unique = uniquePrefix + prefix + '-' + str(row['ID'])
     newNode.contentType = nodeType
     rootNode.children.append(newNode.name)
     nodes[newNode.name] = newNode
