@@ -108,7 +108,10 @@ for x in range(0,cursor.rowcount):
     nodes[newNode.name] = newNode
     
     categoryCursor = db.cursor(MySQLdb.cursors.DictCursor)
-    categoryCursor.execute("SELECT cat_name FROM " + table + "_post2cat JOIN " + table + "_categories ON cat_ID = category_id WHERE post_id = " + str(row['ID']))
+    if version == '2.6':
+        categoryCursor.execute("SELECT " + table + "_terms.name AS cat_name FROM " + table + "_posts JOIN " + table + "_term_relationships ON " + table + "_term_relationships.object_id=" + table + "_posts.ID JOIN " + table + "_term_taxonomy ON " + table + "_term_taxonomy.term_taxonomy_id = " + table + "_term_relationships.term_taxonomy_id JOIN " + table + "_terms ON " + table + "_term_taxonomy.term_id = " + table + "_terms.term_id WHERE " + table + "_posts.ID = " + str(row['ID']) + " AND " + table + "_terms.name <> 'Uncategorized'")
+    else:
+        categoryCursor.execute("SELECT cat_name FROM " + table + "_post2cat JOIN " + table + "_categories ON cat_ID = category_id WHERE post_id = " + str(row['ID']))
     for y in range(0, categoryCursor.rowcount):
       category = categoryCursor.fetchone()
       newNode.categories.append(category['cat_name'])
