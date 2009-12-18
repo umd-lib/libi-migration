@@ -60,6 +60,7 @@ configs = [
   cpct:     new webharvest.cpct(),
   oc:       new webharvest.oc(),
   pres:     new webharvest.pres(),
+  lec:      new webharvest.lec(),
 ]
 
 parseCommandLine()
