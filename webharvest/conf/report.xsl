@@ -6,6 +6,7 @@
   <xsl:output method="text"/>
   
   <xsl:param name="list" select="'false'"/>
+  <xsl:param name="full" select="'false'"/>
   
   <xsl:template match="/nodes">
   
@@ -37,6 +38,22 @@
       <xsl:text> (</xsl:text>
       <xsl:value-of select="@title"/>
       <xsl:text>)&#10;</xsl:text>
+
+      <xsl:if test="$full = 'true'">
+        <xsl:for-each select="data/category">
+          <xsl:value-of select="concat($indent, '-- category: ')"/>
+          <xsl:value-of select="@value"/>
+          <xsl:text>&#10;</xsl:text>
+        </xsl:for-each>
+      </xsl:if>
+
+      <xsl:if test="$full = 'true'">
+        <xsl:for-each select="data/attachment">
+          <xsl:value-of select="concat($indent, '-- attachment: ')"/>
+          <xsl:value-of select="@url"/>
+          <xsl:text>&#10;</xsl:text>
+        </xsl:for-each>
+      </xsl:if>
 
       <xsl:call-template name="listNodes">
         <xsl:with-param name="indent" select="concat($indent, '  ')"/>
