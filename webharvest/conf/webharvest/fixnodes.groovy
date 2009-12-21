@@ -39,7 +39,7 @@ def main() {
     n.text = body.getRootElement().asXML()
   }
 
-  println doc.asXML().replace('&amp;amp;','&')
+  println doc.asXML().replace('&amp;','&')
 }
 
 main()
