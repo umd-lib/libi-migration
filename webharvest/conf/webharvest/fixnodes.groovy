@@ -36,10 +36,10 @@ def main() {
     // Convert org.ww3c.dom.Document to org.dom4j.Document
     body = dr.read(bodydom)
 
-    n.text = body.getRootElement().asXML()    
+    n.text = body.getRootElement().asXML()
   }
 
-  println doc.asXML()
+  println doc.asXML().replace('&amp;amp;','&')
 }
 
 main()
