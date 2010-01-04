@@ -1,0 +1,25 @@
+#!/bin/csh
+
+switch ($1) 
+
+case help:
+  ./export_wordpress.py -h
+  breaksw
+ 
+case dtis:
+  ./export_wordpress.py \
+    -u root \
+    -f work/pass \
+    -t webservices \
+    -x webservices \
+    -v 2.6 \
+    -c blog_post \
+  > work/dtis/nodes-pre.xml \
+  && ../webharvest/bin/groovy fixnodes work/dtis/nodes-pre.xml > work/dtis/nodes.xml \
+  && xslt -x ../webharvest/conf/report.xsl -i work/dtis/nodes.xml list=true full=true
+  breaksw
+
+default:
+  echo invalid option
+  breaksw
+endsw
