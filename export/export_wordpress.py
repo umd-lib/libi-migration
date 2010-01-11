@@ -104,8 +104,8 @@ for x in range(0,cursor.rowcount):
     newNode.url = row['guid']
     newNode.unique = uniquePrefix + prefix + '-' + str(row['ID'])
     newNode.contentType = nodeType
-    rootNode.children.append(newNode.name)
-    nodes[newNode.name] = newNode
+    rootNode.children.append(newNode.unique)
+    nodes[newNode.unique] = newNode
     
     categoryCursor = db.cursor(MySQLdb.cursors.DictCursor)
     if version == '2.6':
