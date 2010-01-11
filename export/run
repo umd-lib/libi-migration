@@ -14,6 +14,7 @@ case dtis:
     -x webservices \
     -v 2.6 \
     -c blog_post \
+    -a 'http://www.lib.umd.edu/blogs/webservices/wp-content/uploads' \
   > work/dtis/nodes-pre.xml \
   && ../webharvest/bin/groovy fixnodes work/dtis/nodes-pre.xml > work/dtis/nodes.xml \
   && xslt -x ../webharvest/conf/report.xsl -i work/dtis/nodes.xml list=true full=true

@@ -1,5 +1,6 @@
 from xml.dom.minidom import Document
 import re
+import sys
 
 import child_node
 
@@ -83,7 +84,7 @@ class Node:
         
     def format_links (self, nodes, url, unique, contentType):
         if contentType == 'attachment' and self.content.find(url) >= 0:
-            self.attachments.append([self.make_internal_link(url), unique])
+            self.attachments.append([url.replace(self.attachments_path,''), unique])
         for i in self.children:
             nodes[i].format_links(nodes, url, unique, contentType)
         self.content = self.content.replace(url, '[[' + unique + ']]')
