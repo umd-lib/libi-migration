@@ -579,7 +579,7 @@ class Config {
 
     } else {
 
-      def http = new HTTPBuilder(page.url)
+      def http = new HTTPBuilder(new URL(page.url, page.url.path.replace('+','%20')))
 
       // make an http HEAD call
       http.request(HEAD) { req ->
@@ -873,7 +873,7 @@ class Config {
 
     log.debug("Download file name: ${page.download}")
 
-    def http = new HTTPBuilder(page.url)
+    def http = new HTTPBuilder(new URL(page.url, page.url.path.replace('+','%20')))
   
     if (!var.nofiles || var.nofiles != 'true') {
       http.request(GET, BINARY) { req ->
@@ -893,7 +893,7 @@ class Config {
   
         // called only for a 401 (access denied) status code:
         response.'404' = { resp ->  
-          log.warn("Error 404: not found: ${url}")
+          log.warn("Error 404: not found: ${page.url}")
         }
       }
     }
