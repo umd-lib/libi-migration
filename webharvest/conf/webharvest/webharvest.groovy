@@ -44,12 +44,12 @@ configs = [
   test:     new webharvest.ConfigTest(),
   pmitd:    new webharvest.PmItd(),
   la:       new webharvest.LibraryAssembly(),
-  tsd:      new webharvest.TSD(),
+  //tsd:      new webharvest.TSD(),
   itd:      new webharvest.ITD(),
   irst:     new webharvest.irst(),
   hum:      new webharvest.hum(),
   lfrf:     new webharvest.lfrf(),
-  tsdpp:    new webharvest.tsdpp(),
+  //tsdpp:    new webharvest.tsdpp(),
   list:     new webharvest.list(),
   acq:      new webharvest.acq(),
   mddaypics: new webharvest.mddaypics(),
@@ -61,6 +61,7 @@ configs = [
   oc:       new webharvest.oc(),
   pres:     new webharvest.pres(),
   lec:      new webharvest.lec(),
+  travel:   new webharvest.travel(),
 ]
 
 parseCommandLine()
