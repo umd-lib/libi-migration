@@ -25,6 +25,7 @@ class travel extends Config {
       ],
     ]
 
+    sidebar = [baseUrl.toString()]
   }
 
 

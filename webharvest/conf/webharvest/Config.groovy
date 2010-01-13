@@ -87,6 +87,9 @@ class Config {
   def followable = null // tree (include/exclude) of regexes
 
   def sidebarSelection = "//table//table/tbody/tr/td[h4]|//table//table/tbody/tr/td[//*[@class='leftcol_heading' or @class='leftcol_text']]"  // re for sidebar selection
+  def sidebar = null       // list of url (string) to keep sidebar
+  def sidebarSaved = null  // a saved sidebar, not included in the body
+
 
   def badlinks = [:]  // report bad links
 
@@ -515,12 +518,18 @@ class Config {
 
   public void extractBodySidebar(Page page, Document doc, Document body) {
 
+    sidebarSaved = null
+
     def l = doc.selectNodes(sidebarSelection)
     if (l.size() > 0) {
-      def div = l[0].clone()
-      div.name = 'div'
-      div.attributes.each { it.detach() }
-      body.rootElement.add(div)
+      if (sidebar == null || page.surl in sidebar) {
+        def div = l[0].clone()
+        div.name = 'div'
+        div.attributes.each { it.detach() }
+        body.rootElement.add(div)
+      } else {
+        sidebarSaved = l[0].clone()
+      }
     }
   }
 
@@ -559,7 +568,14 @@ class Config {
    */
 
   public List getLinks(Node body) {
-    return body.selectNodes('//a/@href|//img/@src')
+    def match = '//a/@href|//img/@src'
+    def links = body.selectNodes(match)
+
+    if (sidebarSaved) {
+      links += df.createDocument(sidebarSaved).selectNodes(match)
+    }
+
+    return links;
   }
 
 
