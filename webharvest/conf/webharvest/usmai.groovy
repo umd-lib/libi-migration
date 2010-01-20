@@ -36,8 +36,18 @@ class usmai extends Config {
     // use the body, strip out header and footer
 
     l = doc.selectNodes("/html/body/*")
+    def inFooter = false
     l.each { e ->
-      div.add(e.clone())
+      if (e.matches("/html/body/table[tbody/tr/td[@class='usmai']]")) {
+        // skip the header
+      } else if (e.matches("/html/body/table[tbody/tr[@class='usmaibar']]")) {
+        // skip usmai bar
+      } else if (inFooter || e.matches("/html/body/p[@class='footer']")) {
+        // skip the footer
+        inFooter = true
+      } else {
+        div.add(e.clone())
+      }
     }
 
     return body
