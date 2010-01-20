@@ -62,6 +62,7 @@ configs = [
   pres:     new webharvest.pres(),
   lec:      new webharvest.lec(),
   travel:   new webharvest.travel(),
+  circstats: new webharvest.circstats(),
 ]
 
 parseCommandLine()
