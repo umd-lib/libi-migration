@@ -67,6 +67,10 @@ class usmai extends Config {
 
     title = pattern.matcher(title).replaceAll('')
 
+    if (title.equals('')) {
+      title = new File(URLDecoder.decode(page.url.path,'UTF-8')).name
+    }
+
     return title;
   }
 }
