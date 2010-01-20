@@ -46,6 +46,8 @@ import org.dom4j.io.DocumentInputSource;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 
+import org.apache.http.impl.cookie.DateUtils
+
 import edu.umd.lims.util.ErrorHandling
 
 
@@ -649,6 +651,10 @@ class Config {
 
     def static pattern = ~/last *(modified|revised): *(\w+ +\d{1,2}, +\d{4})/
 
+    if (page.created) {
+      return page.created
+    }
+
     for (n in doc.selectNodes("//*").reverse()) {
       def m = pattern.matcher(n.text.toLowerCase())
       if (m) {
@@ -778,6 +784,15 @@ class Config {
               }
             }
           }
+        }
+
+        // Get Last-Modified
+        if (resp.headers.'Last-Modified') {
+          try {
+            Date d = DateUtils.parseDate(resp.headers.'Last-Modified');
+            page.created = d.format('yyyy-MM-dd HH:mm:ss').toString()
+          }
+          catch (Exception e) {}
         }
 
         doc = cleaner.clean(reader, charset)
