@@ -1,5 +1,7 @@
 package webharvest
 
+import java.util.regex.Pattern;
+
 import org.apache.log4j.Logger;
 
 import org.dom4j.Document
@@ -53,4 +55,18 @@ class usmai extends Config {
     return body
   }
 
+  /**********************************************************************/
+  /**
+   * Get title of the doc.
+   */
+
+  public String getTitle (Page page, Node doc, Node body) {
+    static pattern = Pattern.compile('^USMAI *-? *')
+
+    String title = super.getTitle(page, doc, body)
+
+    title = pattern.matcher(title).replaceAll('')
+
+    return title;
+  }
 }
