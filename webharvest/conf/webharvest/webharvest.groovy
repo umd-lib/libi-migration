@@ -65,6 +65,9 @@ configs = [
   circstats: new webharvest.circstats(),
   resources: new webharvest.resources(),
   catdbm:    new webharvest.catdbm(),
+  devplan:   new webharvest.devplan(),
+  cldminutes: new webharvest.cldminutes(),
+  statusrep:  new webharvest.statusrep(),
 ]
 
 parseCommandLine()
