@@ -33,6 +33,7 @@ class catdbm extends usmai {
       ['http://usmai.umd.edu/cpc/cat_contacts.html'],
       ['http://usmai.umd.edu/cpc/cat_workshop.html'],
       ['http://usmai.umd.edu/cpc/record_forum.html'],
+      ['http://www.itd.umd.edu/LIMS3/DLM/Documentation.*'],
     ]
 
   }
