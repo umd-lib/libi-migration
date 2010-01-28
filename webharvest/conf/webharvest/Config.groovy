@@ -915,6 +915,10 @@ class Config {
           headers.Cookie = cookies.collect{"${it.key}=${it.value}"}.join('; ')
         }
 
+        authHeaders.each {
+          headers[it.key] = it.value
+        }
+
         response.success = { resp, reader ->
 
           log.debug("Downloading to ${page.download}")
