@@ -95,4 +95,30 @@ class usmai extends Config {
 
     return title;
   }
+
+  /**********************************************************************/
+  /**
+   * Authenticate once at the beginning of the cycle.
+   */
+
+  public void authenticate() {
+    log.info("Providing authentication for ITD")
+
+    // Read in auth password
+    def binding = new Binding()
+    def shell = new GroovyShell(binding)
+
+    try {
+      shell.evaluate(new File('conf/usmai.conf'))
+
+      authHeaders.Authorization = binding.getVariable('auth')
+    }
+    catch (Throwable t) {
+      t.printStackTrace()
+      System.exit(1)
+    }
+
+    log.debug("Cookies: ${cookies}")
+  }
+
 }

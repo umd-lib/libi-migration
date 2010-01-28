@@ -68,6 +68,7 @@ configs = [
   devplan:   new webharvest.devplan(),
   cldminutes: new webharvest.cldminutes(),
   statusrep:  new webharvest.statusrep(),
+  priorities: new webharvest.priorities(),
 ]
 
 parseCommandLine()
