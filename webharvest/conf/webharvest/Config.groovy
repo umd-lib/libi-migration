@@ -617,7 +617,7 @@ class Config {
           // resp.statusLine.statusCode
           // resp.headers.each {println it}
 
-          if (resp.headers.'Content-Type') {
+          if (resp.headers['Content-Type']) {
             (ctype) = resp.headers.'Content-Type'.split(';')
           }
 
@@ -775,7 +775,7 @@ class Config {
  
         // Get the charset
         def charset = 'WINDOWS-1252'  // default value
-        if (resp.headers.'Content-Type') {
+        if (resp.headers['Content-Type']) {
           resp.headers.'Content-Type'.split(';').each {
             if (it.contains('=')) {
               def (k, v) = it.trim().split('=')
@@ -787,7 +787,7 @@ class Config {
         }
 
         // Get Last-Modified
-        if (resp.headers.'Last-Modified') {
+        if (resp.headers['Last-Modified']) {
           try {
             Date d = DateUtils.parseDate(resp.headers.'Last-Modified');
             page.created = d.format('yyyy-MM-dd HH:mm:ss').toString()
