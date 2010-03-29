@@ -647,9 +647,10 @@ class Config {
    * Get creation time of the doc.
    */
 
+  static final pattern = ~/last *(modified|revised): *(\w+ +\d{1,2}, +\d{4})/
+
   public String getCreated (Page page, Node doc, Node body) {
 
-    def static pattern = ~/last *(modified|revised): *(\w+ +\d{1,2}, +\d{4})/
 
     if (page.created) {
       return page.created
