@@ -70,7 +70,8 @@ configs = [
   //statusrep:  new webharvest.statusrep(),
   //priorities: new webharvest.priorities(),
   //diversity: new webharvest.diversity(),
-  facteam:   new webharvest.facteam(),
+  //facteam:   new webharvest.facteam(),
+  ux:          new webharvest.ux(),
 ]
 
 parseCommandLine()
