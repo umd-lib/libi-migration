@@ -71,7 +71,8 @@ configs = [
   //priorities: new webharvest.priorities(),
   //diversity: new webharvest.diversity(),
   //facteam:   new webharvest.facteam(),
-  ux:          new webharvest.ux(),
+  //ux:          new webharvest.ux(),
+  usmai:       new webharvest.usmai(),
 ]
 
 parseCommandLine()

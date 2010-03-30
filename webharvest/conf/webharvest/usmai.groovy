@@ -21,6 +21,24 @@ class usmai extends Config {
 
   public usmai() {
     super()
+
+    baseUrl = new URL('http://usmai.umd.edu/av18/')
+
+    followable = [
+      '^http://usmai.umd.edu/(av18|pass/v18|portico|av16|aastg|authorities|eric2|eric|srsg|ERM)/.*',        
+      '^http://www.itd.umd.edu/LIMS3/[^\\/]*',  
+      '^http://www.itd.umd.edu/LIMS3/DOCS/.*',    
+      '^http://www.itd.umd.edu/LIMS3/DLM/.*',    
+      '^http://www.itd.umd.edu/LIMS3/Indexing/.*',
+    ]
+
+    ['portico/','av16/','aastg/','authorities/','eric2/','srsg/','ERM/erm.html'] .each { 
+      def url = new URL('http://usmai.umd.edu/' + it)
+      def page = new Page(url:url, depth:0)
+      page.ctype = getContentType(page) 
+      urlTodo << page
+    }
+
   }
 
   /**********************************************************************/
@@ -82,8 +100,9 @@ class usmai extends Config {
    * Get title of the doc.
    */
 
+  static Pattern pattern = Pattern.compile('^USMAI *-? *')
+
   public String getTitle (Page page, Node doc, Node body) {
-    static pattern = Pattern.compile('^USMAI *-? *')
 
     String title = super.getTitle(page, doc, body)
 
