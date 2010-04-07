@@ -32,8 +32,19 @@ class usmai extends Config {
       '^http://www.itd.umd.edu/LIMS3/Indexing/.*',
     ]
 
-    ['portico/','av16/','aastg/','authorities/','eric2/','srsg/','ERM/erm.html'] .each { 
-      def url = new URL('http://usmai.umd.edu/' + it)
+    def start = [
+      'http://usmai.umd.edu/portico/',
+      'http://usmai.umd.edu/av16/',
+      'http://usmai.umd.edu/aastg/',
+      'http://usmai.umd.edu/authorities/',
+      'http://usmai.umd.edu/eric2/',
+      'http://usmai.umd.edu/srsg/',
+      'http://usmai.umd.edu/ERM/erm.html',
+      'http://www.itd.umd.edu/LIMS3/DLM/',    
+    ]
+
+    start.each {
+      def url = new URL(it)
       def page = new Page(url:url, depth:0)
       page.ctype = getContentType(page) 
       urlTodo << page
