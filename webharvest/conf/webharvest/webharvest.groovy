@@ -118,6 +118,7 @@ try {
   conf.outbadlinks = new FileWriter(new File(workdir, 'badlinks.txt'))
 
   // add command-line vars
+  conf.var['list'] = 'true'
   vars.each {
     (k, v) = it.split('=',2)
     conf.var[k] = v
