@@ -25,6 +25,7 @@ class grants extends Config {
     followable = [
       ['^http://www.lib.umd.edu/PASD/.*',             // include
         '^http://www.lib.umd.edu/PASD/Project_Guide.html',
+        '^http://www.lib.umd.edu/PASD/Grants.html',
       ]
     ]
   }
