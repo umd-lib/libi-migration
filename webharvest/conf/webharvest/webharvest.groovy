@@ -75,6 +75,7 @@ configs = [
   //usmai:       new webharvest.usmai(),
   //grants:      new webharvest.grants(),
   hr: new webharvest.hr(),
+  faroc: new webharvest.faroc(),
 ]
 
 parseCommandLine()
