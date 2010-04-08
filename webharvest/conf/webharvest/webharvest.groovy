@@ -73,7 +73,8 @@ configs = [
   //facteam:   new webharvest.facteam(),
   //ux:          new webharvest.ux(),
   //usmai:       new webharvest.usmai(),
-  grants:      new webharvest.grants(),
+  //grants:      new webharvest.grants(),
+  hr: new webharvest.hr(),
 ]
 
 parseCommandLine()
