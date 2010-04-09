@@ -134,6 +134,19 @@ class Config {
 
   /**********************************************************************/
   /**
+   * Add url to the todo list.
+   */
+
+  public void addTodo(String surl) {
+    def url = new URL(surl)
+    def page = new Page(url:url, depth:0)
+    page.ctype = getContentType(page) 
+    urlTodo << page
+  }
+
+
+  /**********************************************************************/
+  /**
    * Build a new url. Perform normalization.
    */
 
