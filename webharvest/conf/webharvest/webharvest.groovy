@@ -74,8 +74,9 @@ configs = [
   //ux:          new webharvest.ux(),
   //usmai:       new webharvest.usmai(),
   //grants:      new webharvest.grants(),
-  hr: new webharvest.hr(),
-  faroc: new webharvest.faroc(),
+  hr:          new webharvest.hr(),
+  faroc:       new webharvest.faroc(),
+  serial:      new webharvest.serial(),
 ]
 
 parseCommandLine()
