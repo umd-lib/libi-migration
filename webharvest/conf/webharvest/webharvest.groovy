@@ -78,6 +78,7 @@ configs = [
   faroc:       new webharvest.faroc(),
   serial:      new webharvest.serial(),
   mdhc:        new webharvest.mdhc(),
+  special:     new webharvest.special(),
 ]
 
 parseCommandLine()
