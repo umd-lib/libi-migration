@@ -15,7 +15,7 @@ import org.apache.log4j.Logger
 
 
 /**
-   PmWiki - ITDStaff
+   PmWiki
 
    Authentication:
      Request: POST, authpw=<passwd>
@@ -23,14 +23,13 @@ import org.apache.log4j.Logger
 */
 
 
-class PmItd extends Config {
+class pmwiki extends Config {
 
-  def pmHome = 'ITDStaff'
   def pmPasswords = null
 
   def pmExclusions = ['RecentChanges']
 
-  def private log = Logger.getInstance(PmItd.name);
+  def private log = Logger.getInstance(pmwiki.name);
 
 
   /**********************************************************************/
@@ -38,10 +37,11 @@ class PmItd extends Config {
    * Constructor.
    */
 
-  public PmItd() {
+  public pmwiki() {
     super()
 
-    baseUrl = new URL("http://www.itd.umd.edu/pmwiki/pmwiki.php?n=${pmHome}.HomePage")
+    var.pmHome = 'ITDStaff'
+    var.pmPage = 'HomePage'
 
     followable = [
       ['^http://www.itd.umd.edu/pmwiki/itdextras/.*'             // incl
@@ -65,6 +65,19 @@ class PmItd extends Config {
 
   /**********************************************************************/
   /**
+   * Begin the fetch cycle
+   */
+
+  public void harvest() {
+    // create baseUrl after command vars have been set
+    baseUrl = new URL("http://www.itd.umd.edu/pmwiki/pmwiki.php?n=${var.pmHome}.${var.pmPage}")
+
+    super.harvest()
+  }
+
+    
+  /**********************************************************************/
+  /**
    * Authenticate once at the beginning of the cycle.
    */
 
@@ -72,7 +85,7 @@ class PmItd extends Config {
     log.info("Providing authentication for PmWiki")
 
     def http = new HTTPBuilder(baseUrl)
-    def postBody = [authpw:pmPasswords[pmHome]]
+    def postBody = [authpw:pmPasswords[var.pmHome]]
 
     def cookie = null
 
@@ -170,7 +183,7 @@ class PmItd extends Config {
       def q = page.query
 
       if (q.size() == 1                       // Only one query param of 'n'
-          && q.n?.startsWith("${pmHome}.")    // Is the corrent pmHome
+          && q.n?.startsWith("${var.pmHome}.")    // Is the corrent pmHome
           && q.n.indexOf('?') == -1)          // Doesn't contain extra params
       {
         def home, loc
