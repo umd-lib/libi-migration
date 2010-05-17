@@ -80,6 +80,7 @@ configs = [
   mdhc:        new webharvest.mdhc(),
   special:     new webharvest.special(),
   pub:         new webharvest.pub(),
+  pmwiki:      new webharvest.pmwiki(),
 ]
 
 parseCommandLine()
