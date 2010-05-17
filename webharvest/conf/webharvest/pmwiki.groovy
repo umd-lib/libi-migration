@@ -40,6 +40,8 @@ class pmwiki extends Config {
   public pmwiki() {
     super()
 
+    Page.ignoreQuery = false
+
     var.pmHome = 'ITDStaff'
     var.pmPage = 'HomePage'
 

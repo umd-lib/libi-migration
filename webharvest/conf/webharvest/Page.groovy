@@ -29,6 +29,8 @@ import javax.persistence.Transient
   public File download   // downloaded file name
   public int depth       // depth of link, baseUrl is 0
   @Transient public Page fromPage   // linked from these pages
+  
+  public static ignoreQuery = true  // ignore query string when comparing urls?
 
 
   /**********************************************************************
@@ -65,7 +67,9 @@ import javax.persistence.Transient
 
     if (!(o instanceof Page)) return false
 
-    return url.sameFile(o.url)
+    if (!url.sameFile(o.url)) return false
+
+    return (ignoreQuery ? true : url.query.equals(o.url.query))
   }
 
 
