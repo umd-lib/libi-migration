@@ -622,6 +622,20 @@ class Config {
 
   /**********************************************************************/
   /**
+   * urlPlusToSpace
+   */
+
+  public URL urlPlusToSpace(URL in) {
+    def out = new URL(page.url, page.url.path.replace('+','%20'))
+    out.query = in.query
+    out.ref = in.ref
+
+    return out
+  }
+
+
+  /**********************************************************************/
+  /**
    * Get the content-type of one url.
    */
 
@@ -636,11 +650,7 @@ class Config {
 
     } else {
 
-      def url = new URL(page.url, page.url.path.replace('+','%20'))
-      url.query = page.url.query
-      url.ref = page.url.ref
-
-      def http = new HTTPBuilder(url)
+      def http = new HTTPBuilder(urlPlusToSpace(page.url))
 
       // make an http HEAD call
       http.request(HEAD) { req ->
@@ -939,7 +949,7 @@ class Config {
 
     log.debug("Download file name: ${page.download}")
 
-    def http = new HTTPBuilder(new URL(page.url, page.url.path.replace('+','%20')))
+    def http = new HTTPBuilder(urlPlusToSpace(page.url))
   
     if (!var.nofiles || var.nofiles != 'true') {
       http.request(GET, BINARY) { req ->
