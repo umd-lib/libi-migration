@@ -175,11 +175,39 @@ class pmwiki extends Config {
 
   public String getUnique (Page page) {
 
-    if (page.query.n) {
+    if (page.query.upname) {
+      return page.query.upname
+    } else if (page.query.n) {
       return page.query.n
     } else {
       return page.urlNoAnchor.toString()
     }
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Get the download file name.
+   */
+
+  public File getDownload(Page page) {
+    def name = page.query.upname.replace('%20','_')
+
+    def file = new File(downloaddir, name)
+
+    for (def i=0; file.exists(); i++) {
+      // split into base and extensions
+      def parts = name.split('\\.') as List
+      def base = parts.remove(0)
+
+      // create next name
+      def testname = "${base}_${i}"
+      parts.each { testname += ".${it}" }
+
+      file = new File(downloaddir, testname)
+    }
+
+    return file
   }
 
 
