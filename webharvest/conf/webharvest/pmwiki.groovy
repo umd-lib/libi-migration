@@ -155,7 +155,7 @@ class pmwiki extends Config {
 
   public String getTitle (Page page, Node doc, Node body) {
     if (page.download) {
-      return new File(URLDecoder.decode(page.url.path,'UTF-8')).name
+      return new File(URLDecoder.decode(page.query.upname,'UTF-8')).name
     }
 
     def title = (page.query.n?.split('\\.'))[1]
