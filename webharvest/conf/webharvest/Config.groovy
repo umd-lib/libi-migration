@@ -85,6 +85,8 @@ class Config {
   def buildUrls = [:]  // cache of normalized (buildUrl) urls
 
   def ctypes = [:]     // cache of content types per url
+                       // use toURI() for the key because the query part
+                       // will be ignored otherwise
 
   def followable = null // tree (include/exclude) of regexes
 
@@ -628,9 +630,9 @@ class Config {
     def ctype = null
 
     // check the cache
-    if (ctypes.containsKey(page.url)) {
+    if (ctypes.containsKey(page.url.toURI())) {
       log.debug('Content-Type cache hit')
-      ctype = ctypes[page.url]
+      ctype = ctypes[page.url.toURI()]
 
     } else {
 
@@ -670,7 +672,7 @@ class Config {
       }
 
       // add to the cache
-      ctypes[page.url] = ctype
+      ctypes[page.url.toURI()] = ctype
     }
 
     log.debug("Content-Type: ${ctype}")

@@ -102,6 +102,6 @@ class hr extends Config {
 
     def x = new URL('http://www.lib.umd.edu/PUB/workforce_planning/workforce+planning+10.08.docx');
     buildUrls[x] = x
-    ctypes[x] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ctypes[x.toURI()] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
   }
 }
