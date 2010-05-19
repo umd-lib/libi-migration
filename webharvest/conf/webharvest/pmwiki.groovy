@@ -50,6 +50,10 @@ class pmwiki extends Config {
       ]
     ]
 
+    var.urlFixups = [
+      '\\?action=': '&action=',
+    ]
+
     // Read in PmWiki passwords
     def binding = new Binding()
     def shell = new GroovyShell(binding)
