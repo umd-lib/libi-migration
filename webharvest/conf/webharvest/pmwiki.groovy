@@ -206,8 +206,6 @@ class pmwiki extends Config {
       // Get the query parameters
       def q = page.query
 
-      log.info("q: ${q}")
-
       if (q.n?.startsWith("${var.pmHome}.")
           && (!q.containsKey('action') || q.action == 'download')) 
       {
