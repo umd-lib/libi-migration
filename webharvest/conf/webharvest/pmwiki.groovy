@@ -142,7 +142,13 @@ class pmwiki extends Config {
       return new File(URLDecoder.decode(page.url.path,'UTF-8')).name
     }
 
-    return (page.query.n?.split('\\.'))[1]
+    def title = (page.query.n?.split('\\.'))[1]
+
+    if (title == var.pmPage) {
+      title = var.pmHome
+    }
+
+    return title
   }
 
 
