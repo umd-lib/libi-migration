@@ -596,6 +596,30 @@ class Config {
 
   /**********************************************************************/
   /**
+   * Get the charset of a page in handleHtml
+   */
+
+  public String getCharset(Page page, groovyx.net.http.HttpResponseDecorator$HeadersDecorator headers) {
+
+    def charset = 'WINDOWS-1252'  // default value
+
+    if (headers['Content-Type']) {
+      headers.'Content-Type'.split(';').each {
+        if (it.contains('=')) {
+          def (k, v) = it.trim().split('=')
+          if (k == 'charset') {
+             charset = v
+          }
+        }
+      }
+    }
+
+    return charset
+  }
+
+
+  /**********************************************************************/
+  /**
    * Get the content-type of one url.
    */
 
@@ -788,17 +812,8 @@ class Config {
         // resp.headers.each {println it}
  
         // Get the charset
-        def charset = 'WINDOWS-1252'  // default value
-        if (resp.headers['Content-Type']) {
-          resp.headers.'Content-Type'.split(';').each {
-            if (it.contains('=')) {
-              def (k, v) = it.trim().split('=')
-              if (k == 'charset') {
-                 charset = v
-              }
-            }
-          }
-        }
+        def charset = getCharset(page, resp.headers)
+        log.debug("handleHtml charset: ${charset}")
 
         // Get Last-Modified
         if (resp.headers['Last-Modified']) {
