@@ -625,12 +625,12 @@ class Config {
    * urlPlusToSpace
    */
 
-  public URL urlPlusToSpace(URL in) {
-    def out = new URL(page.url, page.url.path.replace('+','%20'))
-    out.query = in.query
-    out.ref = in.ref
+  public URL urlPlusToSpace(URL uin) {
+    def uout = new URL(uin, uin.path.replace('+','%20'))
+    uout.query = uin.query
+    uout.ref = uin.ref
 
-    return out
+    return uout
   }
 
 
