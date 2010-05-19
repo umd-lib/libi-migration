@@ -87,7 +87,8 @@ class pmwiki extends Config {
     log.info("Providing authentication for PmWiki")
 
     def http = new HTTPBuilder(baseUrl)
-    def postBody = [authpw:pmPasswords[var.pmHome]]
+    def passwd = pmPasswords[var.pmHome] ?: pmPasswords.admin
+    def postBody = [authpw:passwd]
 
     def cookie = null
 
