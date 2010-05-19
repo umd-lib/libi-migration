@@ -244,7 +244,7 @@ class Config {
             def ctype = null
             (ctype) = h.headerFields.'Content-Type'.toString().split(';')
             ctype = ctype.replace('[','').replace(']','')
-            ctypes[url] = ctype
+            ctypes[url.toURI()] = ctype
           }
         }
       }
