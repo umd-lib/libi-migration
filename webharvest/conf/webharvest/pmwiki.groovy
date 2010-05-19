@@ -206,9 +206,10 @@ class pmwiki extends Config {
       // Get the query parameters
       def q = page.query
 
-      if (q.size() == 1                       // Only one query param of 'n'
-          && q.n?.startsWith("${var.pmHome}.")    // Is the corrent pmHome
-          && q.n.indexOf('?') == -1)          // Doesn't contain extra params
+      log.info("q: ${q}")
+
+      if (q.n?.startsWith("${var.pmHome}.")
+          && (!q.containsKey('action') || q.action == 'download')) 
       {
         def home, loc
         (home, loc) = q.n.split('\\.')
