@@ -636,7 +636,11 @@ class Config {
 
     } else {
 
-      def http = new HTTPBuilder(new URL(page.url, page.url.path.replace('+','%20')))
+      def url = new URL(page.url, page.url.path.replace('+','%20'))
+      url.query = page.url.query
+      url.ref = page.url.ref
+
+      def http = new HTTPBuilder(url)
 
       // make an http HEAD call
       http.request(HEAD) { req ->
