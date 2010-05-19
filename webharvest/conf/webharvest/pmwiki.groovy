@@ -191,8 +191,8 @@ class pmwiki extends Config {
   public boolean isFollowable(Page page) {
     def url = page.url
 
-    if (followUrl.containsKey(url)) {
-      return followUrl[url]
+    if (followUrl.containsKey(url.toURI())) {
+      return followUrl[url.toURI()]
     }
 
     def ret = false
@@ -225,7 +225,7 @@ class pmwiki extends Config {
       ret = isFollowableConf(page, followable)
     }
 
-    followUrl[url] = ret
+    followUrl[url.toURI()] = ret
 
     return ret
   }
