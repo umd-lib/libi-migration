@@ -134,6 +134,17 @@ class pmwiki extends Config {
 
   /**********************************************************************/
   /**
+   * Get the charset of a page in handleHtml
+   */
+
+  public String getCharset(Page page, groovyx.net.http.HttpResponseDecorator$HeadersDecorator headers) {
+
+    return 'WINDOWS-1252'
+  }
+
+
+  /**********************************************************************/
+  /**
    * Get title of the doc.
    */
 
