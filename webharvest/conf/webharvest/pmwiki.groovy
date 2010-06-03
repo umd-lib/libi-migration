@@ -275,4 +275,13 @@ class pmwiki extends Config {
   }
 
 
+  /**********************************************************************/
+  /**
+   * Build a new url. Follow server redirects to get the correct url.
+   */
+
+  public URL buildUrlRedirect(URL url) {
+    return url
+  }
+
 }

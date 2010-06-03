@@ -244,6 +244,7 @@ class Config {
             def ctype = null
             (ctype) = h.headerFields.'Content-Type'.toString().split(';')
             ctype = ctype.replace('[','').replace(']','')
+            log.debug("Content-Type caching (buildUrlRedirect) ${url.toURI()} as ${ctype}")
             ctypes[url.toURI()] = ctype
           }
         }
@@ -686,6 +687,7 @@ class Config {
       }
 
       // add to the cache
+      log.debug("Content-Type caching ${page.url.toURI()} as ${ctype}")
       ctypes[page.url.toURI()] = ctype
     }
 
