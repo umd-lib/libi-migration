@@ -54,6 +54,8 @@ class pmwiki extends Config {
       '\\?action=': '&action=',
     ]
 
+    followUrl[(new URL('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=ASTG.Yalan-NewPage&action=download&upname=test.html')).toURI()] = false
+
     // Read in PmWiki passwords
     def binding = new Binding()
     def shell = new GroovyShell(binding)
