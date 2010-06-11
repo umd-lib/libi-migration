@@ -172,7 +172,11 @@ class pmwiki extends Config {
 
   public String getTitle (Page page, Node doc, Node body) {
     if (page.download) {
-      return new File(URLDecoder.decode(page.query.upname,'UTF-8')).name
+      if (page.query.upname) {
+        return new File(URLDecoder.decode(page.query.upname,'UTF-8')).name
+      } else {
+        return new File(URLDecoder.decode(page.url.path,'UTF-8')).name
+      }
     }
 
     def title = (page.query.n?.split('\\.'))[1]
@@ -208,7 +212,12 @@ class pmwiki extends Config {
    */
 
   public File getDownload(Page page) {
-    def name = page.query.upname.replace('%20','_')
+    def name = page.query?.upname?.replace('%20','_')
+
+    if (name == null) {
+      def x = new File(page.url.file)
+      name = x.name.replace('%20','_')
+    }
 
     def file = new File(downloaddir, name)
 
