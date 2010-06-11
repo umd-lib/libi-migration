@@ -37,9 +37,10 @@ silent = False
 prefix = 'wordpress'
 attachments_path = ''
 version = '2.0'
+debug = False
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], 'u:t:x:r:f:pc:t:sa:v:', ['username','table=','root=','prefix=','passfile=','content=','password', 'silent', 'attachments=', 'version='])
+    opts, args = getopt.getopt(sys.argv[1:], 'u:t:x:r:f:pc:t:sa:v:d', ['username','table=','root=','prefix=','passfile=','content=','password', 'silent', 'attachments=', 'version=', 'debug'])
 except getopt.GetoptError:
     print "Command line options\n" + \
         "\t-u: username\n" + \
@@ -51,7 +52,8 @@ except getopt.GetoptError:
         "\t-c: content type (e.g., \"news\" or)\n" + \
         "\t-a: path for the attachments folder\n" + \
         "\t-v: wordpress version; default is 2.0\n" + \
-        "\t-s: silent (no output)\n"
+        "\t-s: silent (no output)\n" + \
+        "\t-d: debug (verbose output to STDERR)\n"
     sys.exit(2)
 
 for opt, arg in opts:
@@ -76,9 +78,15 @@ for opt, arg in opts:
         attachments_path = arg + '/'
     if opt in ('-v','--version'):
         version = arg
+    if opt in ('-d','--debug'):
+        debug = True
+
+if (debug): sys.stderr.write("connecting to mysql\n")
 
 db = MySQLdb.connect(host="localhost", user=username, passwd=password, db="wordpress")
 
+
+if (debug): sys.stderr.write("retrieving posts and attachments\n")
 
 cursor = db.cursor(MySQLdb.cursors.DictCursor)
 cursor.execute("SELECT user_login, post_content, post_title, post_date, guid, " + table + "_posts.ID, post_mime_type  FROM " + table + "_posts JOIN " + table + "_users ON " + table + "_users.ID = post_author WHERE post_status != 'draft' AND post_title != '' AND post_type in ('post','attachment')")
@@ -106,7 +114,9 @@ for x in range(0,cursor.rowcount):
     newNode.contentType = nodeType
     rootNode.children.append(newNode.unique)
     nodes[newNode.unique] = newNode
-    
+
+    if (debug): sys.stderr.write("got %s: %s\n" % newNode.contentType,newNode.name)
+
     categoryCursor = db.cursor(MySQLdb.cursors.DictCursor)
     if version == '2.6':
         categoryCursor.execute("SELECT " + table + "_terms.name AS cat_name FROM " + table + "_posts JOIN " + table + "_term_relationships ON " + table + "_term_relationships.object_id=" + table + "_posts.ID JOIN " + table + "_term_taxonomy ON " + table + "_term_taxonomy.term_taxonomy_id = " + table + "_term_relationships.term_taxonomy_id JOIN " + table + "_terms ON " + table + "_term_taxonomy.term_id = " + table + "_terms.term_id WHERE " + table + "_posts.ID = " + str(row['ID']) + " AND " + table + "_terms.name <> 'Uncategorized'")
