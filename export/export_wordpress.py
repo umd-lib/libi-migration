@@ -113,7 +113,7 @@ db = MySQLdb.connect(host="localhost", user=username, passwd=password, db="wordp
 if (debug): sys.stderr.write("retrieving posts and attachments\n")
 
 cursor = db.cursor(MySQLdb.cursors.DictCursor)
-cursor.execute("SELECT user_login, post_content, post_title, post_date, guid, " + table + "_posts.ID, post_mime_type  FROM " + table + "_posts JOIN " + table + "_users ON " + table + "_users.ID = post_author WHERE post_status != 'draft' AND post_title != '' AND post_type in ('post','attachment')")
+cursor.execute("SELECT user_login, post_content, post_title, post_date, guid, " + table + "_posts.ID, post_mime_type  FROM " + table + "_posts JOIN " + table + "_users ON " + table + "_users.ID = post_author WHERE post_status != 'draft' AND post_title != '' AND post_type in ('post','attachment','')")
 
 nodes = {}
 rootNode = node.Node(rootName, "", "", attachments_path)
@@ -139,7 +139,7 @@ for x in range(0,cursor.rowcount):
     rootNode.children.append(newNode.unique)
     nodes[newNode.unique] = newNode
 
-    if (debug): sys.stderr.write("got %s: %s\n" % newNode.contentType,newNode.name)
+    if (debug): sys.stderr.write("got %(c)s: %(n)s\n" % {'c':newNode.contentType, 'n':newNode.name})
 
     categoryCursor = db.cursor(MySQLdb.cursors.DictCursor)
     if version == '2.6':
