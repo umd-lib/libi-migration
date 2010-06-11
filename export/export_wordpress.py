@@ -40,9 +40,9 @@ version = '2.0'
 debug = False
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], 'u:t:x:r:f:pc:t:sa:v:d', ['username','table=','root=','prefix=','passfile=','content=','password', 'silent', 'attachments=', 'version=', 'debug'])
+    opts, args = getopt.getopt(sys.argv[1:], 'u:t:x:r:f:pc:t:sa:v:d', ['username=','table=','root=','prefix=','passfile=','content=','password', 'silent', 'attachments=', 'version=', 'debug'])
 except getopt.GetoptError:
-    print "Command line options\n" + \
+    sys.stderr.write("Command line options\n" + \
         "\t-u: username\n" + \
         "\t-p: prompt for password\n" + \
         "\t-f: passfile\n" + \
@@ -53,7 +53,7 @@ except getopt.GetoptError:
         "\t-a: path for the attachments folder\n" + \
         "\t-v: wordpress version; default is 2.0\n" + \
         "\t-s: silent (no output)\n" + \
-        "\t-d: debug (verbose output to STDERR)\n"
+        "\t-d: debug (verbose output to STDERR)\n")
     sys.exit(2)
 
 for opt, arg in opts:
@@ -80,6 +80,30 @@ for opt, arg in opts:
         version = arg
     if opt in ('-d','--debug'):
         debug = True
+
+if (debug):
+    template = """Params:
+  username: %(u)s
+  table: %(t)s
+  prefix = %(p)s
+  content = %(c)s
+  rootName = %(r)s
+  silent = %(s)s
+  attachments_path = %(a)s
+  version = %(v)s
+  debug = %(d)s
+""" 
+    sys.stderr.write(template % { 'u' :username,
+                                  't' : table,
+                                  'p' : prefix,
+                                  'c' : content,
+                                  'r' : rootName,
+                                  's' : silent,
+                                  'a' : attachments_path,
+                                  'v' : version,
+                                  'd' : debug
+                                  })
+    
 
 if (debug): sys.stderr.write("connecting to mysql\n")
 
