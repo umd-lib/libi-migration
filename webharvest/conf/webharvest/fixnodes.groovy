@@ -52,9 +52,9 @@ def main() {
     createParent(doc)
   }
 
+  outfile = new OutputStreamWriter(new FileOutputStream(outfile))
   outfile << doc.asXML().replace('&amp;','&')
 }
-
 
 
 /**********************************************************************/
