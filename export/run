@@ -34,6 +34,20 @@ case ocpg:
   && xslt -x ../webharvest/conf/report.xsl -i work/ocpg/nodes.xml list=true full=true
   breaksw
 
+case sst:
+  ./export_wordpress.py --username=root \
+    --passfile='work/pass' \
+    --table=sst \
+    --prefix=sst \
+    --version=2.0 \
+    --content=page \
+    --attachments='http://www.lib.umd.edu/blogs/sst/wp-content/uploads' \
+    --debug \
+  > work/sst/nodes-pre.xml \
+  && ../webharvest/bin/groovy fixnodes work/sst/nodes-pre.xml > work/sst/nodes.xml \
+  && xslt -x ../webharvest/conf/report.xsl -i work/sst/nodes.xml list=true full=true
+  breaksw
+
 default:
   echo invalid option
   breaksw
