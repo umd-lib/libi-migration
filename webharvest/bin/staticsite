@@ -52,7 +52,7 @@ def main() {
 
       def body = n.selectSingleNode('data/body').text
 
-      body = body.replaceAll(/\[\[(.*)\]\]/, { all,u -> map[u] })            
+      body = body.replaceAll(/\[\[(.*?)\]\]/, { all,u -> map[u] })            
 
       // build html file
       def file = new File(filesdir, filename)
