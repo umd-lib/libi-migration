@@ -126,11 +126,13 @@ class Config {
    */
 
   public void addBadLink(String from, String to) {
-    if (! badlinks[from]) {
-      badlinks[from] = []
+    if (from != null) {
+      if (! badlinks[from]) {
+        badlinks[from] = []
+      }
+      
+      badlinks[from] << to
     }
-
-    badlinks[from] << to
   }
 
 
@@ -680,8 +682,8 @@ class Config {
   
         // not round
         response.'404' = { resp ->  
-          log.warn("Error 404: not found: ${page.url} (from=${page.fromPage.url})")
-          addBadLink(page.fromPage.surl, page.surl)
+          log.warn("Error 404: not found: ${page.url} (from=${page.fromPage?.url})")
+          addBadLink(page.fromPage?.surl, page.surl)
           ctype = 'unknown/notfound'
         }
       }
