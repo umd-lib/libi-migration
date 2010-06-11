@@ -48,8 +48,56 @@ def main() {
     n.text = body.getRootElement().asXML()
   }
 
+  if (parent) {
+    createParent(doc)
+  }
+
   outfile << doc.asXML().replace('&amp;','&')
 }
+
+
+
+/**********************************************************************/
+/*
+ * Create a new, first parent node of all the others with a list of
+ * links.
+ */
+
+def createParent(doc) {
+  // Create body
+  def body = DocumentHelper.createDocument();
+  def ul = body.addElement('div').addElement('ul')
+
+  doc.selectNodes('//node').sort{ it.attributeValue('created') }.each { n ->
+    def title = n.attributeValue('title')
+    def unique = n.attributeValue('unique')
+
+    ul
+    .addElement('li')
+    .addElement('a')
+    .addAttribute('href',"[[${unique}]]")
+    .addText(title)
+  }
+
+  // Add new node to the doc
+  def nodes = doc.selectSingleNode('//nodes')
+
+  def node = nodes
+  .addElement('node')
+  .addAttribute('created', (new Date()).format('yyyy-MM-dd HH:mm:ss').toString())
+  .addAttribute('name', 'anonymous')
+  .addAttribute('title', 'Parent Node (fixnodes)')
+  .addAttribute('type', 'page')
+  .addAttribute('unique','fixnodes-parent')
+  .addElement('data')
+  .addElement('body')
+  .addText(body.getRootElement().asXML())
+
+  // Move to the first position
+  def list = nodes.content()
+  list.add(0, list.pop())
+}
+
 
 /**********************************************************************/
 /*
