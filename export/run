@@ -1,4 +1,4 @@
-#!/bin/csh
+#!/bin/csh -x
 
 switch ($1) 
 
@@ -18,6 +18,20 @@ case dtis:
   > work/dtis/nodes-pre.xml \
   && ../webharvest/bin/groovy fixnodes work/dtis/nodes-pre.xml > work/dtis/nodes.xml \
   && xslt -x ../webharvest/conf/report.xsl -i work/dtis/nodes.xml list=true full=true
+  breaksw
+
+case ocpg:
+  ./export_wordpress.py --username=root \
+    --passfile='work/pass' \
+    --table=ocpg \
+    --prefix=ocpg \
+    --version=2.0 \
+    --content=blog_post \
+    --attachments='http://www.lib.umd.edu/blogs/ocpg/wp-content/uploads' \
+    --debug \
+  > work/ocpg/nodes-pre.xml \
+  && ../webharvest/bin/groovy fixnodes work/ocpg/nodes-pre.xml > work/ocpg/nodes.xml \
+  && xslt -x ../webharvest/conf/report.xsl -i work/ocpg/nodes.xml list=true full=true
   breaksw
 
 default:
