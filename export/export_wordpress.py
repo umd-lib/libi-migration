@@ -170,6 +170,6 @@ for node,curNode in nodes.iteritems():
 xml = rootNode.xml(Document(), None, nodes)
 if not silent:
     xmltext = xml.toprettyxml(indent="  ")
-    xmltext = xmltext.replace('<?xml version="1.0" ?>','<?xml version="1.0" encoding="windows-1252" ?>')
+    xmltext = xmltext.replace('<?xml version="1.0" ?>','<?xml version="1.0" encoding="UTF-8" ?>')
     print xmltext
     
