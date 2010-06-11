@@ -1,0 +1,142 @@
+#!/usr/bin/env groovy
+
+// Generate static html files from nodes.xml
+//
+// TODO: make work for other than pmwiki
+
+import org.apache.commons.cli.*
+
+import org.dom4j.*
+import org.dom4j.io.*
+
+@Grab(group = 'dom4j', module = 'dom4j', version = '1.6.1')  
+@Grab(group = 'jaxen', module = 'jaxen', version = '1.1.1')  
+
+def main() {
+
+  parseCommandLine()
+
+  try {
+    nodesf = new File(workdir, 'nodes.xml')
+    filesdir = new File(workdir, 'files')
+
+    // read nodes
+    nodefiles = []
+
+    reader = new SAXReader()
+    nodes = reader.read(nodesf)
+
+    // map unique to filename
+    def map = [:]
+
+    nodes.selectNodes("//node").each { n -> 
+      def unique = n.selectSingleNode('@unique').text
+      def title = n.selectSingleNode('@title').text
+
+      def filename = title + '.html'
+
+      def attachment = n.selectSingleNode('data/attachment')
+      if (attachment) {
+        filename = attachment.selectSingleNode('@url').text
+      }
+
+      map[unique] = filename
+    }
+
+    // turn nodes into html
+    nodes.selectNodes("//node[@type='folder' and count(data/attachment)=0]").each { n -> 
+      def unique = n.selectSingleNode('@unique').text
+      def title = n.selectSingleNode('@title').text
+
+      def filename = map[unique]
+
+      def body = n.selectSingleNode('data/body').text
+
+      body = body.replaceAll(/\[\[(.*)\]\]/, { all,u -> map[u] })            
+
+      // build html file
+      def file = new File(filesdir, filename)
+
+      println "Writing ${file}"
+
+      def w = new OutputStreamWriter(new FileOutputStream(file))
+
+      w.write("""
+<html>
+  <head>
+    <title>${title}</title>
+  <head>
+  <body>
+    <h1>${title}</h1>
+""")
+      w.write(body)
+      w.write("""
+  </body>
+</html>
+""")
+
+      w.close()
+    }
+    
+
+  }
+  catch (Throwable t) {
+    t.printStackTrace()
+    System.exit(1)
+  }
+  System.exit(0)
+}
+
+main()
+
+
+/**********************************************************************/
+/*
+ * Parse the command line.
+ */
+
+def parseCommandLine() {
+  // Setup the options
+  options = new Options()
+  
+  option = new Option("w", "workdir", true, "work directory; with nodes.xml and files")
+  option.setRequired(false)
+  option.setType(File)
+  options.addOption(option)
+
+  // Parse the command line
+  parser = new PosixParser()
+  cmd = parser.parse(options, args)
+
+  // workdir
+  if (cmd.hasOption('w')) {
+    workdir = cmd.getOptionObject('w')
+  } else {
+    workdir = new File("work/tsd")
+  }
+
+  if (! workdir.exists()) {
+    printUsage(options, "${workdir} does not exist")
+  }
+  if (! workdir.isDirectory()) {
+    printUsage(options, "${workdir} is not a directory")
+  }
+}
+
+
+/**********************************************************************/
+/*
+ * Print program usage.
+ */
+
+def printUsage(Options options, Object[] args) {
+  // print messages
+  args.each {println it}
+  if (args.size() != 0) { println '' }
+
+  formatter = new HelpFormatter()
+  formatter.printHelp("staticsite -w <workdir>", options)
+
+  System.exit(1)
+}
+
