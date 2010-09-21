@@ -1,0 +1,2 @@
+ALTER TABLE <table_name> CONVERT TO CHARACTER SET utf8;
+
