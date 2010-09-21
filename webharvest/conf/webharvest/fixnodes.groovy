@@ -54,6 +54,7 @@ def main() {
 
   outfile = new OutputStreamWriter(new FileOutputStream(outfile))
   outfile << doc.asXML().replace('&amp;','&')
+  outfile.close()
 }
 
 
