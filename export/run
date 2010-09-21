@@ -44,7 +44,10 @@ case sst:
     --attachments='http://www.lib.umd.edu/blogs/sst/wp-content/uploads' \
     --debug \
   > work/sst/nodes-pre.xml \
-  && ../webharvest/bin/groovy fixnodes work/sst/nodes-pre.xml > work/sst/nodes.xml \
+  && ../webharvest/bin/groovy fixnodes \
+    --infile=work/sst/nodes-pre.xml \
+    --outfile=work/sst/nodes.xml \
+    --parent \
   && xslt -x ../webharvest/conf/report.xsl -i work/sst/nodes.xml list=true full=true
   breaksw
 
