@@ -59,6 +59,10 @@ def main() {
 
       filenames << filename
       map[unique] = filename
+
+      n.selectNodes('data/attachment') { a ->
+        map[a.attachmentValue('unique')] = a.attachmentValue('url')
+      }
     }
 
     // turn nodes into html
