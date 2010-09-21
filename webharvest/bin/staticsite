@@ -60,8 +60,8 @@ def main() {
       filenames << filename
       map[unique] = filename
 
-      n.selectNodes('data/attachment') { a ->
-        map[a.attachmentValue('unique')] = a.attachmentValue('url')
+      n.selectNodes('data/attachment').each { a ->
+        map[a.attributeValue('unique')] = a.attributeValue('url')
       }
     }
 
