@@ -31,6 +31,8 @@ class pmwiki extends Config {
 
   def private log = Logger.getInstance(pmwiki.name);
 
+  def needAddTodo = true
+
 
   /**********************************************************************/
   /**
@@ -234,6 +236,64 @@ class pmwiki extends Config {
     }
 
     return file
+  }
+
+
+  /**********************************************************************/
+  /**
+   * Handle one page.
+   */
+
+  public void handlePage(Page page) {
+    super.handlePage(page)
+
+    if (needAddTodo) {
+      // add todos after the home page has been processed
+      needAddTodo = false
+
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.07102009USMAICirculationEnventsCalendar')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.081808ClarificationOfProtocolDocument')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.08282008USMAIILLStaffContactList')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Agenda012909')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Agenda042108')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Agenda0508')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Agenda051208')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Agenda0608')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Agenda061108')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Agenda0708')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Agenda0731')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Agenda0808')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Agenda082608')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Agenda110608')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Attributes')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.August2008Minutes')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Codes')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.December2008Minutes')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.GroupAttributes')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.July2008Minutes')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.June2008Minutes')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Meeting070219')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.MeetingMinutes')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.MeetingMinutesAmpAgendas')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Meetings')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.MeetingScribeScheduleFor2009')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Minutes012909')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Minutes021907')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Minutes0328')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Minutes042108')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Minutes051208')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Minutes061108')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Minutes0731')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Minutes110608')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Minutes1212')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.Minutes121206')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.November2008Minutes')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.October2008Minutes')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.RecentChanges')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.September2008Minutes')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.TasksToKnow-StaffTrainingSpreadsheet')
+      addTodo('http://www.itd.umd.edu/pmwiki/pmwiki.php?n=RSTG.UPSNewContractAmpRatesInformation')
+    }
   }
 
 
