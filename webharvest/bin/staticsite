@@ -52,7 +52,7 @@ def main() {
       // Determine the file name
       def filename = null
       for (i=0; i==0 || filename in filenames; i++) {
-        filename = title.replace(' ','_')
+        filename = title.replaceAll(/[ \/]/,'_')
         filename += (i > 0 ? '_'+i : '')
         filename += '.html'
       }
