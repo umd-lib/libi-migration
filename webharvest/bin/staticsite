@@ -57,17 +57,12 @@ def main() {
         filename += '.html'
       }
 
-      def attachment = n.selectSingleNode('data/attachment')
-      if (attachment) {
-        filename = attachment.selectSingleNode('@url').text
-      }
-
       filenames << filename
       map[unique] = filename
     }
 
     // turn nodes into html
-    nodes.selectNodes("//node[@type='folder' and count(data/attachment)=0]").each { n -> 
+    nodes.selectNodes("//node").each { n -> 
       def unique = n.selectSingleNode('@unique').text
       def title = n.selectSingleNode('@title').text
 
