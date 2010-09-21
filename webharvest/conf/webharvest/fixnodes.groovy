@@ -33,7 +33,8 @@ def main() {
   dr = new DOMReader(df)
 
   saxreader = new SAXReader()
-  doc = saxreader.read(infile)
+  infiler = new FixUnicodeFilterReader(new InputStreamReader(new FileInputStream(infile), "UTF-8"));
+  doc = saxreader.read(infiler)
 
   doc.selectNodes('//node/data/body').each { n ->
     // Cleanup
@@ -159,3 +160,35 @@ def printUsage(Options options, Object[] args) {
 
 main()
 
+
+public class FixUnicodeFilterReader extends FilterReader {
+
+  private long l = 0;
+
+  protected FixUnicodeFilterReader(Reader inr) {
+    super(inr)
+  }
+
+  public int read() 
+  throws IOException
+  {
+    throw new IOException("read() method not supported")
+  }
+
+  public int read(char[] cbuf, int off, int len)
+  throws IOException
+  {
+    int n = super.read(cbuf, off, len)
+
+    for (int i = off; i < n+off; i++) {
+      if ((int)cbuf[i] in [0x09,0x0A,0x0D]) {
+        // do nothing
+      } else if (Character.isISOControl(cbuf[i])) {
+        // replace with ?
+        cbuf[i] = '?'
+      }
+    }
+
+    return n
+  }
+}
