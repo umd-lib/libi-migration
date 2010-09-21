@@ -19,6 +19,22 @@ def main() {
   try {
     nodesf = new File(workdir, 'nodes.xml')
     filesdir = new File(workdir, 'files')
+    staticdir = new File(workdir, 'static')
+
+    def filenames = [] as Set
+
+    // setup output static directory
+    if (! staticdir.exists()) {
+      staticdir.mkdir()
+    } else {
+      staticdir.eachFile() { it.delete() }
+    }
+
+    // copy files
+    filesdir.eachFile() {
+      filenames << it.name
+      new File(staticdir, it.name) << new FileInputStream(it)
+    }
 
     // read nodes
     nodefiles = []
@@ -55,7 +71,7 @@ def main() {
       body = body.replaceAll(/\[\[(.*?)\]\]/, { all,u -> map[u] })            
 
       // build html file
-      def file = new File(filesdir, filename)
+      def file = new File(staticdir, filename)
 
       println "Writing ${file}"
 
