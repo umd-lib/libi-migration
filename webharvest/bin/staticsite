@@ -49,13 +49,20 @@ def main() {
       def unique = n.selectSingleNode('@unique').text
       def title = n.selectSingleNode('@title').text
 
-      def filename = title + '.html'
+      // Determine the file name
+      def filename = null
+      for (i=0; i==0 || filename in filenames; i++) {
+        filename = title.replace(' ','_')
+        filename += (i > 0 ? '_'+i : '')
+        filename += '.html'
+      }
 
       def attachment = n.selectSingleNode('data/attachment')
       if (attachment) {
         filename = attachment.selectSingleNode('@url').text
       }
 
+      filenames << filename
       map[unique] = filename
     }
 
