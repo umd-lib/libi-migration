@@ -74,6 +74,19 @@ def main() {
 
       def body = n.selectSingleNode('data/body').text
 
+      // add attachments
+      def attachments = n.selectNodes('data/attachment')
+      if (attachments) {
+        body += "<div><h2>Attachments</h2><ul>\n"
+        attachments.each { a ->
+          def aunique = a.attributeValue('unique')
+          def aurl = a.attributeValue('url')
+          body += "<li><a href=\"[[${aunique}]]\">${aurl}</a></li>"
+        }
+        body += "</ul</div>\n"
+      }
+
+      // map links
       body = body.replaceAll(/\[\[(.*?)\]\]/, { all,u -> map[u] })            
 
       // build html file
