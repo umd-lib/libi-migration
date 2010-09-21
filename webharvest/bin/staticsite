@@ -106,7 +106,12 @@ def parseCommandLine() {
 
   // Parse the command line
   parser = new PosixParser()
-  cmd = parser.parse(options, args)
+  try {
+    cmd = parser.parse(options, args)
+  }
+  catch (Exception e) {
+    printUsage(options, e.getMessage())
+  }
 
   // workdir
   workdir = cmd.getOptionObject('w')
