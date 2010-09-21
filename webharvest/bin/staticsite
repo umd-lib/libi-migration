@@ -100,7 +100,7 @@ def parseCommandLine() {
   options = new Options()
   
   option = new Option("w", "workdir", true, "work directory; with nodes.xml and files")
-  option.setRequired(false)
+  option.setRequired(true)
   option.setType(File)
   options.addOption(option)
 
@@ -109,11 +109,7 @@ def parseCommandLine() {
   cmd = parser.parse(options, args)
 
   // workdir
-  if (cmd.hasOption('w')) {
-    workdir = cmd.getOptionObject('w')
-  } else {
-    workdir = new File("work/tsd")
-  }
+  workdir = cmd.getOptionObject('w')
 
   if (! workdir.exists()) {
     printUsage(options, "${workdir} does not exist")
