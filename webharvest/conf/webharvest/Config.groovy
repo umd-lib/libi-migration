@@ -1230,9 +1230,14 @@ class Config {
 
     log.debug("Adding ${clone} to hibernate object store")
 
-    hb.save(clone)
+    try {
+      hb.save(clone)
 
-    urlSaved << page
+      urlSaved << page
+    }
+    catch (Exception e) {
+      log.error("Exception saving page: " + e.getMessage());
+    }
   }
 
 
