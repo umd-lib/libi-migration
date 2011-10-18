@@ -74,13 +74,14 @@ configs = [
   //ux:          new webharvest.ux(),
   //usmai:       new webharvest.usmai(),
   //grants:      new webharvest.grants(),
-  hr:          new webharvest.hr(),
-  faroc:       new webharvest.faroc(),
-  serial:      new webharvest.serial(),
-  mdhc:        new webharvest.mdhc(),
-  special:     new webharvest.special(),
-  pub:         new webharvest.pub(),
-  pmwiki:      new webharvest.pmwiki(),
+  //hr:          new webharvest.hr(),
+  //faroc:       new webharvest.faroc(),
+  //serial:      new webharvest.serial(),
+  //mdhc:        new webharvest.mdhc(),
+  //special:     new webharvest.special(),
+  //pub:         new webharvest.pub(),
+  //pmwiki:      new webharvest.pmwiki(),
+  itdat:       new webharvest.itdat(),
 ]
 
 parseCommandLine()
