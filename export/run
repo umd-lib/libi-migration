@@ -67,6 +67,23 @@ case nprint:
   && xslt -x ../webharvest/conf/report.xsl -i work/nprint/nodes.xml list=true full=true
   breaksw
 
+case mdmap:
+  ./export_wordpress.py --username=root \
+    --database=mdmap \
+    --passfile='work/pass' \
+    --table=wp \
+    --prefix=mdmap \
+    --version=2.6 \
+    --content=blog_post \
+    --attachments='http://www.lib.umd.edu/blogs/nprint/wp-content/uploads' \
+    --debug \
+  > work/mdmap/nodes-pre.xml \
+  && ../webharvest/bin/groovy fixnodes \
+    --infile=work/mdmap/nodes-pre.xml \
+    --outfile=work/mdmap/nodes.xml \
+  && xslt -x ../webharvest/conf/report.xsl -i work/mdmap/nodes.xml list=true full=true
+  breaksw
+
 default:
   echo invalid option
   breaksw
