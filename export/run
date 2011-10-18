@@ -76,7 +76,6 @@ case mdmap:
     --prefix=mdmap \
     --version=2.6 \
     --content=blog_post \
-    --attachments='http://www.lib.umd.edu/sapps/mdmap/wp-content/uploads' \
     --debug \
   > work/mdmap/nodes-pre.xml \
   && ../webharvest/bin/groovy fixnodes \
