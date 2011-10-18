@@ -1,0 +1,7 @@
+#!/bin/bash
+
+grep ^year report.txt |cut -d: -f2-|perl -pe 's/\d/#/g; s/ +/ /g'|sort|uniq -c|doseol>report-year.txt
+
+ grep ^callnum report.txt |cut -d: -f2-|perl -pe 's/\d/#/g; s/ +/ /g'|sort|uniq -c|doseol> report-callnum-1.txt
+
+grep ^callnum report.txt |cut -d: -f2-|perl -pe 's/\d/#/g; s/ +/ /g; s/\w/a/g'|sort|uniq -c|doseol>report-callnum-2.txt
