@@ -38,11 +38,13 @@ prefix = 'wordpress'
 attachments_path = ''
 version = '2.0'
 debug = False
+database = 'wordpress'
 
 try:
-    opts, args = getopt.getopt(sys.argv[1:], 'u:t:x:r:f:pc:t:sa:v:d', ['username=','table=','root=','prefix=','passfile=','content=','password', 'silent', 'attachments=', 'version=', 'debug'])
+    opts, args = getopt.getopt(sys.argv[1:], 'u:t:x:r:f:pc:t:sa:v:db:', ['username=','table=','root=','prefix=','passfile=','content=','password', 'silent', 'attachments=', 'version=', 'debug', 'database='])
 except getopt.GetoptError:
     sys.stderr.write("Command line options\n" + \
+        "\t-b: database; default is wordpress\n" + \
         "\t-u: username\n" + \
         "\t-p: prompt for password\n" + \
         "\t-f: passfile\n" + \
@@ -57,6 +59,8 @@ except getopt.GetoptError:
     sys.exit(2)
 
 for opt, arg in opts:
+    if opt in ('-b','--database'):
+        database = arg
     if opt in ('-p','--password'):
         password = getpass.getpass()
     if opt in ('-f','--passfile'):
@@ -83,6 +87,7 @@ for opt, arg in opts:
 
 if (debug):
     template = """Params:
+  database: %(b)s
   username: %(u)s
   table: %(t)s
   prefix = %(p)s
@@ -94,6 +99,7 @@ if (debug):
   debug = %(d)s
 """ 
     sys.stderr.write(template % { 'u' :username,
+                                  'b' : database,
                                   't' : table,
                                   'p' : prefix,
                                   'c' : content,
@@ -107,7 +113,7 @@ if (debug):
 
 if (debug): sys.stderr.write("connecting to mysql\n")
 
-db = MySQLdb.connect(host="localhost", user=username, passwd=password, db="wordpress")
+db = MySQLdb.connect(host="localhost", user=username, passwd=password, db=database)
 
 
 if (debug): sys.stderr.write("retrieving posts and attachments\n")
