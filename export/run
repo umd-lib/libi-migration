@@ -84,6 +84,24 @@ case mdmap:
   && xslt -x ../webharvest/conf/report.xsl -i work/mdmap/nodes.xml list=true full=true
   breaksw
 
+case engin:
+  ./export_wordpress.py \
+    --username=wordpress \
+    --database=wordpress \
+    --passfile='work/pass' \
+    --table=ext_engin \
+    --prefix=engin \
+    --version=2.0 \
+    --content=blog_post \
+    --debug \
+  > work/engin/nodes-pre.xml \
+  && ../webharvest/bin/groovy fixnodes \
+    --infile=work/engin/nodes-pre.xml \
+    --outfile=work/engin/nodes.xml \
+  && xslt -x ../webharvest/conf/report.xsl -i work/engin/nodes.xml list=true full=true | tee work/palpreview/report.txt
+  breaksw
+
+
 default:
   echo invalid option
   breaksw
