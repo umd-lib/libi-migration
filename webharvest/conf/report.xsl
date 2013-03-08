@@ -38,7 +38,17 @@
       <xsl:text> (</xsl:text>
       <xsl:value-of select="@title"/>
       <xsl:text>)&#10;</xsl:text>
+      
+      <!-- creation date -->
+      <xsl:value-of select="concat($indent, '-- creation date: ')"/>
+      <xsl:value-of select="@created"/>
+      <xsl:text>&#10;</xsl:text>
 
+      <!-- author -->
+      <xsl:value-of select="concat($indent, '-- author: ')"/>
+      <xsl:value-of select="@name"/>
+      <xsl:text>&#10;</xsl:text>
+      
       <xsl:if test="$full = 'true'">
         <xsl:for-each select="data/category">
           <xsl:value-of select="concat($indent, '-- category: ')"/>
