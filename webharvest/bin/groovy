@@ -28,6 +28,6 @@ done
 
 export CLASSPATH
 
-/usr/bin/groovy $BASEDIR/conf/webharvest/"$@"
+groovy $BASEDIR/conf/webharvest/"$@"
 
 

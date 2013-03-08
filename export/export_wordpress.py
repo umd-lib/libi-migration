@@ -113,7 +113,7 @@ if (debug):
 
 if (debug): sys.stderr.write("connecting to mysql\n")
 
-db = MySQLdb.connect(host="localhost", user=username, passwd=password, db=database)
+db = MySQLdb.connect(host="localhost", unix_socket="/apps/mysql/mysql.sock", user=username, db=database)
 
 
 if (debug): sys.stderr.write("retrieving posts and attachments\n")
