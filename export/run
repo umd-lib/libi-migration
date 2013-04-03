@@ -117,7 +117,7 @@ case engin:
   && ../webharvest/bin/groovy fixnodes \
     --infile=work/engin/nodes-pre.xml \
     --outfile=work/engin/nodes.xml \
-  && xslt -x ../webharvest/conf/report.xsl -i work/engin/nodes.xml list=true full=true | tee work/palpreview/report.txt
+  && xslt -x ../webharvest/conf/report.xsl -i work/engin/nodes.xml list=true full=true | tee work/engin/report.txt
   breaksw
 
 
