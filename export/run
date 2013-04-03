@@ -120,6 +120,23 @@ case engin:
   && xslt -x ../webharvest/conf/report.xsl -i work/engin/nodes.xml list=true full=true | tee work/engin/report.txt
   breaksw
 
+case univarch_exhibits:
+  ./export_wordpress.py \
+    --username=wordpress \
+    --database=wordpress \
+    --passfile='work/pass' \
+    --table=ext_univarch_exhibits \
+    --prefix=univarch_exhibits \
+    --version=2.0 \
+    --content=blog_post \
+    --debug \
+  > work/univarch_exhibits/nodes-pre.xml \
+  && ../webharvest/bin/groovy fixnodes \
+    --infile=work/univarch_exhibits/nodes-pre.xml \
+    --outfile=work/univarch_exhibits/nodes.xml \
+  && xslt -x ../webharvest/conf/report.xsl -i work/univarch_exhibits/nodes.xml list=true full=true | tee work/univarch_exhibits/report.txt
+  breaksw
+
 
 default:
   echo invalid option
